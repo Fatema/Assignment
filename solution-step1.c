@@ -192,39 +192,76 @@ void updateBody() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    double force[3];
-    force[0] = 0.0;
-    force[1] = 0.0;
-    force[2] = 0.0;
+    int i, j, k;
+    double xi, yi, zi, X, Y, Z, fx, fy, fz, distance;
 
-    for (int i = 1; i < NumberOfBodies; i++) {
-        const double distance = sqrt(
-                (x[0][0] - x[i][0]) * (x[0][0] - x[i][0]) +
-                (x[0][1] - x[i][1]) * (x[0][1] - x[i][1]) +
-                (x[0][2] - x[i][2]) * (x[0][2] - x[i][2])
-        );
+    double force[NumberOfBodies][3];
 
-        /*
-         * removed the current particle mass from the force calculation as it is divided later on for the updated velocity
+    // initialize the values for the forces 2D array
+    for (i = 0; i < NumberOfBodies; i++) {
+        force[i][0] = 0.0;
+        force[i][1] = 0.0;
+        force[i][2] = 0.0;
+    }
+
+
+    for (i = 0; i < NumberOfBodies; ++i) {
+        xi = x[i][0];
+        yi = x[i][1];
+        zi = x[i][2];
+        fx = 0.0;
+        fy = 0.0;
+        fz = 0.0;
+
+        //todo this part includes a lot of duplicated computations see if there is a better way to compute them
+
+        for (j = 0; j < NumberOfBodies; j++) {
+            if(i == j) continue;
+
+            X = xi - x[j][0];
+            Y = yi - x[j][1];
+            Z = zi - x[j][2];
+
+            distance = X * X +  Y * Y + Z * Z;
+            const double distance_sqrt = std::sqrt(distance);
+
+            distance *= distance_sqrt;
+
+            /*
+             * removed the current particle mass from the force calculation as it is divided later on for the updated velocity
+             */
+            fx += X * mass[j] / distance;
+            fy += Y * mass[j] / distance;
+            fz += Z * mass[j] / distance;
+
+            minDx = std::min(minDx, distance_sqrt);
+        }
+
+        /**
+         * must flip the sign to get the actual force sign
          */
-        force[0] += (x[i][0] - x[0][0]) * mass[i] / distance / distance / distance;
-        force[1] += (x[i][1] - x[0][1]) * mass[i] / distance / distance / distance;
-        force[2] += (x[i][2] - x[0][2]) * mass[i] / distance / distance / distance;
-
-        minDx = std::min(minDx, distance);
+        force[i][0] -= fx;
+        force[i][1] -= fy;
+        force[i][2] -= fz;
     }
 
-    for (int j = 0; j < NumberOfBodies; j++) {
-        x[j][0] = x[j][0] + timeStepSize * v[j][0];
-        x[j][1] = x[j][1] + timeStepSize * v[j][1];
-        x[j][2] = x[j][2] + timeStepSize * v[j][2];
+    //todo do I actually need two seperate loops for this?
+
+    for (i = 0; i < NumberOfBodies; i++) {
+        x[i][0] = x[i][0] + timeStepSize * v[i][0];
+        x[i][1] = x[i][1] + timeStepSize * v[i][1];
+        x[i][2] = x[i][2] + timeStepSize * v[i][2];
     }
 
-    v[0][0] = v[0][0] + timeStepSize * force[0];
-    v[0][1] = v[0][1] + timeStepSize * force[1];
-    v[0][2] = v[0][2] + timeStepSize * force[2];
+    for (i = 0; i < NumberOfBodies; i++) {
+        v[i][0] = v[i][0] + timeStepSize * force[i][0];
+        v[i][1] = v[i][1] + timeStepSize * force[i][1];
+        v[i][2] = v[i][2] + timeStepSize * force[i][2];
 
-    maxV = std::sqrt(v[0][0] * v[0][0] + v[0][1] * v[0][1] + v[0][2] * v[0][2]);
+        const double V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
+
+        maxV = std::max(maxV, V);
+    }
 
     t += timeStepSize;
 }

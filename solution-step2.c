@@ -214,13 +214,14 @@ void updateBody() {
         fz = 0.0;
 
         //todo this part includes a lot of duplicated computations see if there is a better way to compute them
+        //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
 
         for (j = 0; j < NumberOfBodies; j++) {
             if(i == j) continue;
 
-            dx = x[j][0] - xi;
-            dy = x[j][1] - yi;
-            dz = x[j][2] - zi;
+            dx = xi - x[j][0];
+            dy = yi - x[j][1];
+            dz = zi - x[j][2];
 
             distance = dx * dx + dy * dy + dz * dz;
             const double distance_sqrt = std::sqrt(distance);
@@ -231,7 +232,6 @@ void updateBody() {
              * removed the current particle mass from the force calculation as it is divided later on for the updated velocity
              */
             F = mass[j] / distance;
-
             fx += dx * F;
             fy += dy * F;
             fz += dz * F;
@@ -239,9 +239,12 @@ void updateBody() {
             minDx = std::min(minDx, distance_sqrt);
         }
 
-        force[i][0] = fx;
-        force[i][1] = fy;
-        force[i][2] = fz;
+        /**
+         * must flip the sign to get the actual force sign
+         */
+        force[i][0] -= fx;
+        force[i][1] -= fy;
+        force[i][2] -= fz;
     }
 
     //todo do I actually need two seperate loops for this?

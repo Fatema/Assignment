@@ -193,7 +193,10 @@ void updateBody() {
     minDx = std::numeric_limits<double>::max();
 
     int i, j, k;
-    double xi, yi, zi, dx, dy, dz, F, fx, fy, fz, distance;
+    double xi, yi, zi, dx, dy, dz, F, fr2, fr6, fx, fy, fz;
+
+    const double epsilon = 1.65e-21;
+    const double sigma = 3.4e-10;
 
     double force[NumberOfBodies][3];
 
@@ -213,9 +216,10 @@ void updateBody() {
         fy = 0.0;
         fz = 0.0;
 
-        //todo this part includes a lot of duplicated computations see if there is a better way to compute them
         //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
-
+        // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
+        // http://phycomp.technion.ac.il/~talimu/md2.html
+        // the last r is squared because we break the force down to x,y and z components
         for (j = 0; j < NumberOfBodies; j++) {
             if(i == j) continue;
 
@@ -223,20 +227,28 @@ void updateBody() {
             dy = yi - x[j][1];
             dz = zi - x[j][2];
 
-            distance = dx * dx + dy * dy + dz * dz;
-            const double distance_sqrt = std::sqrt(distance);
+            const double r2 = dx * dx + dy * dy + dz * dz;
 
-            distance *= distance_sqrt;
+            fr2 = sigma * sigma / r2;
+            fr6 = fr2 * fr2 * fr2;
 
-            /*
-             * removed the current particle mass from the force calculation as it is divided later on for the updated velocity
+            /**
+             * simplified Lennard-Jones
+             * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
+             * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
+             * fx = -dU/dx = -(x/r) * dU/dr
+             *
+             * finding the square root is an expensive operation so since all components of the force (x,y,z) are
+             * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
              */
-            F = mass[j] / distance;
+
+            F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
+
             fx += dx * F;
             fy += dy * F;
             fz += dz * F;
 
-            minDx = std::min(minDx, distance_sqrt);
+            minDx = std::min(minDx, r2);
         }
 
         /**
@@ -246,6 +258,8 @@ void updateBody() {
         force[i][1] -= fy;
         force[i][2] -= fz;
     }
+
+    minDx = std::sqrt(minDx);
 
     //todo do I actually need two seperate loops for this?
 

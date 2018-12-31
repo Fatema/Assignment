@@ -197,6 +197,7 @@ void updateBody() {
 
     const double epsilon = 1.65e-21;
     const double sigma = 3.4e-10;
+    const double sigma2 = sigma * sigma;
 
     double force[NumberOfBodies][3];
 
@@ -229,7 +230,7 @@ void updateBody() {
 
             const double r2 = dx * dx + dy * dy + dz * dz;
 
-            fr2 = sigma * sigma / r2;
+            fr2 = sigma2 / r2;
             fr6 = fr2 * fr2 * fr2;
 
             /**
@@ -252,7 +253,7 @@ void updateBody() {
         }
 
         /**
-         * must flip the sign to get the actual force sign
+         * must flip the sign so it can be used for velocity calculations
          */
         force[i][0] -= fx;
         force[i][1] -= fy;

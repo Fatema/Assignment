@@ -193,7 +193,7 @@ void updateBody() {
     minDx = std::numeric_limits<double>::max();
 
     int j;
-    double xi, yi, zi, dx, dy, dz, distance, F, fx, fy, fz;
+    double xi, yi, zi, dx, dy, dz, distance, F, fx, fy, fz, mt;
 
     double force[3];
     force[0] = 0.0;
@@ -214,21 +214,28 @@ void updateBody() {
         dy = x[j][1] - yi;
         dz = x[j][2] - zi;
 
-        distance = dx * dx + dy * dy + dz * dz;
-        const double distance_sqrt = std::sqrt(distance);
+        const double r2 = dx * dx + dy * dy + dz * dz;
 
-        distance *= distance_sqrt;
+        fr2 = sigma2 / r2;
+        fr6 = fr2 * fr2 * fr2;
 
-        /*
-         * removed the current particle mass from the force calculation as it is divided later on for the updated velocity
+        /**
+         * simplified Lennard-Jones
+         * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
+         * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
+         * fx = -dU/dx = -(x/r) * dU/dr
+         *
+         * finding the square root is an expensive operation so since all components of the force (x,y,z) are
+         * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
          */
-        F = mass[j] / distance;
+
+        F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
 
         fx += dx * F;
         fy += dy * F;
         fz += dz * F;
 
-        minDx = std::min(minDx, distance_sqrt);
+        minDx = std::min(minDx, r2);
     }
 
     for (j = 0; j < NumberOfBodies; j++) {
@@ -237,9 +244,11 @@ void updateBody() {
         x[j][2] = x[j][2] + timeStepSize * v[j][2];
     }
 
-    v[0][0] = v[0][0] + timeStepSize * force[0];
-    v[0][1] = v[0][1] + timeStepSize * force[1];
-    v[0][2] = v[0][2] + timeStepSize * force[2];
+    mt = timeStepSize / mass[0];
+
+    v[0][0] = v[0][0] + mt * force[0];
+    v[0][1] = v[0][1] + mt * force[1];
+    v[0][2] = v[0][2] + mt * force[2];
 
     maxV = std::sqrt(v[0][0] * v[0][0] + v[0][1] * v[0][1] + v[0][2] * v[0][2]);
 

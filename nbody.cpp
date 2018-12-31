@@ -10,6 +10,7 @@
 /* take advantage of symmetry.              */
 /* The time integrator is a simple leapfrog */
 /* scheme.                                  */
+// http://www.new-npac.org/projects/cdroms/cewes-1999-06-vol2/cps615course/nbody-materials/nbody-simulations.html
 /*------------------------------------------*/
 
 #include "mpi.h"

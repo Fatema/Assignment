@@ -193,7 +193,7 @@ void updateBody() {
     minDx = std::numeric_limits<double>::max();
 
     int i, j, k;
-    double xi, yi, zi, dx, dy, dz, F, fr2, fr6, fx, fy, fz;
+    double xi, yi, zi, dx, dy, dz, F, fr2, fr6, fx, fy, fz, mt;
 
     const double epsilon = 1.65e-21;
     const double sigma = 3.4e-10;
@@ -271,9 +271,10 @@ void updateBody() {
     }
 
     for (i = 0; i < NumberOfBodies; i++) {
-        v[i][0] = v[i][0] + timeStepSize * force[i][0];
-        v[i][1] = v[i][1] + timeStepSize * force[i][1];
-        v[i][2] = v[i][2] + timeStepSize * force[i][2];
+        mt = timeStepSize / mass[i];
+        v[i][0] = v[i][0] + mt * force[i][0];
+        v[i][1] = v[i][1] + mt * force[i][1];
+        v[i][2] = v[i][2] + mt * force[i][2];
 
         const double V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
 

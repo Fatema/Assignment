@@ -195,9 +195,9 @@ void updateBody() {
     int i, j, k;
     double xi, yi, zi, dx, dy, dz, F, fr2, fr6, fx, fy, fz, mt;
 
-    const double epsilon = 1.65e-21;
-    const double sigma = 3.4e-10;
-    const double sigma2 = sigma * sigma;
+    double epsilon = 1.65e-21;
+    double sigma = 3.4e-10;
+    double sigma2 = sigma * sigma;
 
     double force[NumberOfBodies][3];
 
@@ -262,15 +262,12 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
-    //todo do I actually need two seperate loops for this?
 
     for (i = 0; i < NumberOfBodies; i++) {
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
         x[i][2] = x[i][2] + timeStepSize * v[i][2];
-    }
 
-    for (i = 0; i < NumberOfBodies; i++) {
         mt = timeStepSize / mass[i];
         v[i][0] = v[i][0] + mt * force[i][0];
         v[i][1] = v[i][1] + mt * force[i][1];

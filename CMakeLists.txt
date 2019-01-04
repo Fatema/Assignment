@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
-project(Assignment)
+project(nbody)
 
 set(CMAKE_CXX_COMPILER icpc)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
 
-set(SOURCE_FILES solution-step1.c)
+set(STEP_1 solution-step1.c)
+set(STEP_2 solution-step2.c)
 
-SET_SOURCE_FILES_PROPERTIES(${SOURCE_FILES} PROPERTIES LANGUAGE CXX)
+SET_SOURCE_FILES_PROPERTIES(${STEP_1} PROPERTIES LANGUAGE CXX)
+SET_SOURCE_FILES_PROPERTIES(${STEP_2} PROPERTIES LANGUAGE CXX)
 
-add_executable(Assignment ${SOURCE_FILES})
+add_executable(step1 ${STEP_1})
+add_executable(step2 ${STEP_2})

@@ -244,15 +244,11 @@ void updateBody() {
         force[i][2] = fz;
     }
 
-    //todo do I actually need two seperate loops for this?
-
     for (i = 0; i < NumberOfBodies; i++) {
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
         x[i][2] = x[i][2] + timeStepSize * v[i][2];
-    }
 
-    for (i = 0; i < NumberOfBodies; i++) {
         v[i][0] = v[i][0] + timeStepSize * force[i][0];
         v[i][1] = v[i][1] + timeStepSize * force[i][1];
         v[i][2] = v[i][2] + timeStepSize * force[i][2];

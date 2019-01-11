@@ -199,10 +199,11 @@ void updateBody() {
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
-    double force[NumberOfBodies][3];
+    double **force  = new double *[NumberOfBodies];
 
     // initialize the values for the forces 2D array
     for (i = 0; i < NumberOfBodies; i++) {
+        force[i] = new double[3];
         force[i][0] = 0.0;
         force[i][1] = 0.0;
         force[i][2] = 0.0;

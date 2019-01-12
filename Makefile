@@ -4,5 +4,5 @@ CC = icpc
 reset: result-*.vtp result.pvd
 	rm result-*.vtp result.pvd
 
-assignment: assignment-2018.c
+%.o: %.c
 	$(CC) $(CFLAGS) -o $@ $<

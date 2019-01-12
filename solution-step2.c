@@ -60,6 +60,8 @@ double maxV;
 double minDx;
 
 
+double **force  = new double *[NumberOfBodies];
+
 /**
  * Set up scenario from the command line.
  *
@@ -199,11 +201,9 @@ void updateBody() {
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
-    double **force  = new double *[NumberOfBodies];
-
+    // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
     for (i = 0; i < NumberOfBodies; i++) {
-        force[i] = new double[3];
         force[i][0] = 0.0;
         force[i][1] = 0.0;
         force[i][2] = 0.0;
@@ -253,23 +253,22 @@ void updateBody() {
             minDx = std::min(minDx, r2);
         }
 
-        /**
-         * must flip the sign so it can be used for velocity calculations
-         */
-        force[i][0] -= fx;
-        force[i][1] -= fy;
-        force[i][2] -= fz;
+        force[i][0] = fx;
+        force[i][1] = fy;
+        force[i][2] = fz;
     }
 
     minDx = std::sqrt(minDx);
 
 
     for (i = 0; i < NumberOfBodies; i++) {
+
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
         x[i][2] = x[i][2] + timeStepSize * v[i][2];
 
         mt = timeStepSize / mass[i];
+
         v[i][0] = v[i][0] + mt * force[i][0];
         v[i][1] = v[i][1] + mt * force[i][1];
         v[i][2] = v[i][2] + mt * force[i][2];
@@ -324,6 +323,11 @@ int main(int argc, char **argv) {
     }
 
     int timeStepCounter = 0;
+
+    for (int i = 0; i < NumberOfBodies; ++i) {
+        force[i] = new double[3];
+    }
+
     while (t <= tFinal) {
         updateBody();
         timeStepCounter++;

@@ -203,6 +203,7 @@ void updateBody() {
 
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
+//#pragma omp parallel for
     for (i = 0; i < NumberOfBodies; i++) {
         force[i][0] = 0.0;
         force[i][1] = 0.0;

@@ -1,0 +1,244 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C++ Intel(R) 64 Compiler for applications running on Intel(R) 64, Version 19.0.0.117 Build 20180804
+
+Compiler options: -O3 --std=c++11 -qopt-report-phase=vec -qopt-report=5 -o solution-step6.o
+
+Begin optimization report for: main(int, char **)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(293,32)
+   remark #15389: vectorization support: reference __a[__i] has unaligned access   [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1356,17) ]
+   remark #15381: vectorization support: unaligned access used inside loop body
+   remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
+   remark #15305: vectorization support: vector length 2
+   remark #15309: vectorization support: normalized vectorization overhead 0.500
+   remark #15451: unmasked unaligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 2 
+   remark #15477: vector cost: 3.000 
+   remark #15478: estimated potential speedup: 0.540 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(293,55)
+   remark #15389: vectorization support: reference __a[__i] has unaligned access   [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1356,17) ]
+   remark #15381: vectorization support: unaligned access used inside loop body
+   remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
+   remark #15305: vectorization support: vector length 2
+   remark #15309: vectorization support: normalized vectorization overhead 0.500
+   remark #15451: unmasked unaligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 2 
+   remark #15477: vector cost: 3.000 
+   remark #15478: estimated potential speedup: 0.540 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at solution-step6.c(328,5)
+   remark #15523: loop was not vectorized: loop control variable i was found, but loop iteration count cannot be computed before executing the loop
+LOOP END
+
+LOOP BEGIN at solution-step6.c(332,5)
+   remark #15523: loop was not vectorized: loop control variable timeStepCounter was found, but loop iteration count cannot be computed before executing the loop
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/fstream(487:13)::_main:  Assume directive not useful: removing
+
+===========================================================================
+
+Begin optimization report for: printParaviewSnapshot()
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(160,23)
+   remark #15389: vectorization support: reference filename.__sb_.__sb_.__sb_.__sb_.__sb_.__sb_.__sb_.__sb_[__i] has unaligned access   [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1356,17) ]
+   remark #15381: vectorization support: unaligned access used inside loop body
+   remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or -vec-threshold0 to override 
+   remark #15305: vectorization support: vector length 2
+   remark #15451: unmasked unaligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 2 
+   remark #15477: vector cost: 3.000 
+   remark #15478: estimated potential speedup: 0.750 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   <Multiversioned v2>
+      remark #15304: loop was not vectorized: non-vectorizable loop instance from multiversioning
+   LOOP END
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   <Remainder, Multiversioned v2>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   <Multiversioned v2>
+      remark #15304: loop was not vectorized: non-vectorizable loop instance from multiversioning
+   LOOP END
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(163,26)
+   <Remainder, Multiversioned v2>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(163,26)
+   remark #15388: vectorization support: reference U74_V.U74_V.U74_V.U74_V.U74_V.U74_V.U74_V[__i] has aligned access   [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1356,17) ]
+   remark #15305: vectorization support: vector length 2
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15449: unmasked aligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 2 
+   remark #15477: vector cost: 1.500 
+   remark #15478: estimated potential speedup: 1.200 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(163,26)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at solution-step6.c(170,5)
+   remark #15523: loop was not vectorized: loop control variable i was found, but loop iteration count cannot be computed before executing the loop
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   <Multiversioned v2>
+      remark #15304: loop was not vectorized: non-vectorizable loop instance from multiversioning
+   LOOP END
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   <Remainder, Multiversioned v2>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   remark #15398: loop was not vectorized: loop was transformed to memset or memcpy
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   <Multiversioned v2>
+      remark #15304: loop was not vectorized: non-vectorizable loop instance from multiversioning
+   LOOP END
+
+   LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1877,5) inlined into solution-step6.c(185,102)
+   <Remainder, Multiversioned v2>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(185,102)
+   remark #15388: vectorization support: reference U74_V.U74_V.U74_V.U74_V.U74_V.U74_V.U74_V[__i] has aligned access   [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1356,17) ]
+   remark #15305: vectorization support: vector length 2
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15449: unmasked aligned unit stride stores: 1 
+   remark #15475: --- begin vector cost summary ---
+   remark #15476: scalar cost: 2 
+   remark #15477: vector cost: 1.500 
+   remark #15478: estimated potential speedup: 1.200 
+   remark #15488: --- end vector cost summary ---
+LOOP END
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/string(1355,13) inlined into solution-step6.c(185,102)
+<Remainder loop for vectorization>
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/fstream(487:13)::__Z21printParaviewSnapshotv:  Assume directive not useful: removing
+
+===========================================================================
+
+Begin optimization report for: updateBody()
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at solution-step6.c(207,5)
+   remark #15344: loop was not vectorized: vector dependence prevents vectorization
+   remark #15346: vector dependence: assumed OUTPUT dependence between force[i][0] (208:9) and force[i][2] (210:9)
+   remark #15346: vector dependence: assumed OUTPUT dependence between force[i][2] (210:9) and force[i][0] (208:9)
+LOOP END
+
+LOOP BEGIN at solution-step6.c(207,5)
+<Remainder>
+LOOP END
+
+LOOP BEGIN at solution-step6.c(214,5)
+   remark #15344: loop was not vectorized: vector dependence prevents vectorization
+   remark #15346: vector dependence: assumed ANTI dependence between x[i][0] (215:9) and force[i][2] (259:9)
+   remark #15346: vector dependence: assumed FLOW dependence between force[i][2] (259:9) and x[i][0] (215:9)
+
+   LOOP BEGIN at solution-step6.c(226,9)
+      remark #15344: loop was not vectorized: vector dependence prevents vectorization
+      remark #15346: vector dependence: assumed ANTI dependence between x[j][0] (229:13) and minDx (254:13)
+      remark #15346: vector dependence: assumed FLOW dependence between minDx (254:13) and x[j][0] (229:13)
+   LOOP END
+
+   LOOP BEGIN at solution-step6.c(226,9)
+      remark #15344: loop was not vectorized: vector dependence prevents vectorization
+      remark #15346: vector dependence: assumed ANTI dependence between x[j][0] (229:13) and minDx (254:13)
+      remark #15346: vector dependence: assumed FLOW dependence between minDx (254:13) and x[j][0] (229:13)
+   LOOP END
+LOOP END
+
+LOOP BEGIN at solution-step6.c(265,5)
+   remark #15344: loop was not vectorized: vector dependence prevents vectorization
+   remark #15346: vector dependence: assumed OUTPUT dependence between x[i][0] (267:9) and maxV (279:9)
+   remark #15346: vector dependence: assumed OUTPUT dependence between maxV (279:9) and x[i][0] (267:9)
+LOOP END
+===========================================================================
+
+Begin optimization report for: setUp(int, char **)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at solution-step6.c(87,5)
+   remark #15523: loop was not vectorized: loop control variable i was found, but loop iteration count cannot be computed before executing the loop
+LOOP END
+===========================================================================
+
+Begin optimization report for: openParaviewVideoFile()
+
+    Report from: Code generation optimizations [cg]
+
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/fstream(487:13)::__Z21openParaviewVideoFilev:  Assume directive not useful: removing
+
+===========================================================================
+
+Begin optimization report for: std::__1::basic_filebuf<char, std::__1::char_traits<char>>::overflow(std::__1::basic_filebuf<char, std::__1::char_traits<char>> *, std::__1::basic_filebuf<char, std::__1::char_traits<char>>::int_type)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/fstream(701,29)
+   remark #15521: loop was not vectorized: loop control variable was not identified. Explicitly compute the iteration count before executing the loop or try using canonical loop form from OpenMP specification
+LOOP END
+===========================================================================
+
+Begin optimization report for: std::__1::basic_filebuf<char, std::__1::char_traits<char>>::sync(std::__1::basic_filebuf<char, std::__1::char_traits<char>> *)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/fstream(860,9)
+   remark #15521: loop was not vectorized: loop control variable was not identified. Explicitly compute the iteration count before executing the loop or try using canonical loop form from OpenMP specification
+LOOP END
+===========================================================================

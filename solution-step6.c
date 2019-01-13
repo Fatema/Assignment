@@ -47,7 +47,7 @@ double *mass;
 /**
  * Global time step size used.
  */
-double timeStepSize = 0.0001;
+double timeStepSize = 0.000001;
 
 /**
  * Maximum velocity of all particles.

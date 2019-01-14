@@ -61,7 +61,7 @@ double maxV;
 double minDx;
 
 
-double **force = new double *[NumberOfBodies];
+double **force;
 
 /**
  * Set up scenario from the command line.
@@ -331,6 +331,9 @@ int main(int argc, char **argv) {
     }
 
     int timeStepCounter = 0;
+
+
+    force = new double *[NumberOfBodies];
 
     for (int i = 0; i < NumberOfBodies; ++i) {
         force[i] = new double[3];

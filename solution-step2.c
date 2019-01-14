@@ -60,7 +60,7 @@ double maxV;
 double minDx;
 
 
-double **force  = new double *[NumberOfBodies];
+double **force;
 
 /**
  * Set up scenario from the command line.
@@ -106,6 +106,8 @@ void setUp(int argc, char **argv) {
 
         mass[i] = std::stof(argv[readArgument]);
         readArgument++;
+
+        std::cout << "values are " << x[i][0] << x[i][1] << x[i][2] << v[i][0] << v[i][1] << v[i][2] << mass[i] << " bodies" << std::endl;
 
         if (mass[i] <= 0.0) {
             std::cerr << "invalid mass for body " << i << std::endl;
@@ -323,6 +325,9 @@ int main(int argc, char **argv) {
     }
 
     int timeStepCounter = 0;
+
+
+    force = new double *[NumberOfBodies];
 
     for (int i = 0; i < NumberOfBodies; ++i) {
         force[i] = new double[3];

@@ -1,4 +1,4 @@
-CFLAGS = -O3 --std=c++11
+CFLAGS = -O3 --std=c++11 -pg
 CC = icpc
 OMP = -qopenmp
 VECREPORT = -qopt-report-phase=vec -qopt-report=5

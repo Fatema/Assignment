@@ -229,7 +229,7 @@ void updateBody() {
         // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
         // http://phycomp.technion.ac.il/~talimu/md2.html
         // the last r is squared because we break the force down to x,y and z components
-#pragma omp parallel for firstprivate(xi, yi, zi, dx, dy, dz, F, fr2, fr6, r2) reduction(min:minDx) reduction(+:fx, fy, fz)
+#pragma omp parallel for schedule(guided, 14) firstprivate(xi, yi, zi, dx, dy, dz, F, fr2, fr6, r2) reduction(min:minDx) reduction(+:fx, fy, fz)
         for (int j = 0; j < NumberOfBodies; j++) {
             if (i == j) continue;
 

@@ -1,5 +1,4 @@
 import argparse
-import sys
 from math import floor, sqrt
 from random import random
 
@@ -7,7 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("nbody", help="number of random bodies to generate")
 args = parser.parse_args()
 
-params = "0 1e4"
+params = "100 1e4"
 xoffset = 0
 yoffset = 0
 x = 0
@@ -29,6 +28,6 @@ for i in range(1, n + 1):
     yoffset = yoffset + 5e-9 if i % limit == 0 else yoffset
     params += " {x} {y} {z} {vx} {vy} {vz} {m}".format(x=x, y=y, z=z, m=m, vx=vx, vy=vy, vz=vz)
 
-print(params)
+print params
 
 

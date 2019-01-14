@@ -205,12 +205,16 @@ void updateBody() {
 
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
-#pragma omp parallel for shared(force, NumberOfBodies)
-    for (int i = 0; i < NumberOfBodies; i++) {
-        force[i][0] = 0.0;
-        force[i][1] = 0.0;
-        force[i][2] = 0.0;
+#pragma omp parallel shared(force, NumberOfBodies)
+    {
+#pragma omp for
+        for (int i = 0; i < NumberOfBodies; i++) {
+            force[i][0] = 0.0;
+            force[i][1] = 0.0;
+            force[i][2] = 0.0;
+        }
     }
+
 
 #pragma omp parallel for shared(x, force, NumberOfBodies) private(xi, yi, zi, fx, fy, fz) reduction(min:minDx)
     for (int i = 0; i < NumberOfBodies; ++i) {

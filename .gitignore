@@ -5,3 +5,4 @@ step-1/*
 step-2/*
 .vscode/
 *.o
+result*

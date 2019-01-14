@@ -17,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include <omp.h>
 #include <cmath>
 #include <limits>
 
@@ -47,7 +48,7 @@ double *mass;
 /**
  * Global time step size used.
  */
-double timeStepSize = 0.000001;
+double timeStepSize = 0.0001;
 
 /**
  * Maximum velocity of all particles.
@@ -60,7 +61,7 @@ double maxV;
 double minDx;
 
 
-double **force  = new double *[NumberOfBodies];
+double **force = new double *[NumberOfBodies];
 
 /**
  * Set up scenario from the command line.
@@ -194,24 +195,25 @@ void updateBody() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    int i, j;
-    double xi, yi, zi, dx, dy, dz, F, fr2, fr6, fx, fy, fz, mt;
+    double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
+    int numberOfThreads = omp_get_num_procs();
+
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
-//#pragma omp parallel for
-    for (i = 0; i < NumberOfBodies; i++) {
+#pragma omp parallel for
+    for (int i = 0; i < NumberOfBodies; i++) {
         force[i][0] = 0.0;
         force[i][1] = 0.0;
         force[i][2] = 0.0;
     }
 
-
-    for (i = 0; i < NumberOfBodies; ++i) {
+#pragma omp parallel for private(xi, yi, zi, fx, fy, fz) reduction(min:minDx)
+    for (int i = 0; i < NumberOfBodies; ++i) {
         xi = x[i][0];
         yi = x[i][1];
         zi = x[i][2];
@@ -223,14 +225,15 @@ void updateBody() {
         // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
         // http://phycomp.technion.ac.il/~talimu/md2.html
         // the last r is squared because we break the force down to x,y and z components
-        for (j = 0; j < NumberOfBodies; j++) {
-            if(i == j) continue;
+#pragma omp parallel for private(xi, yi, zi, dx, dy, dz, F, fr2, fr6, r2) reduction(min:minDx) reduction(+:fx, fy, fz)
+        for (int j = 0; j < NumberOfBodies; j++) {
+            if (i == j) continue;
 
             dx = xi - x[j][0];
             dy = yi - x[j][1];
             dz = zi - x[j][2];
 
-            const double r2 = dx * dx + dy * dy + dz * dz;
+            r2 = dx * dx + dy * dy + dz * dz;
 
             fr2 = sigma2 / r2;
             fr6 = fr2 * fr2 * fr2;
@@ -261,8 +264,8 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
-
-    for (i = 0; i < NumberOfBodies; i++) {
+#pragma omp parallel for private(mt, V) reduction(max:maxV)
+    for (int i = 0; i < NumberOfBodies; i++) {
 
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
@@ -274,9 +277,9 @@ void updateBody() {
         v[i][1] = v[i][1] + mt * force[i][1];
         v[i][2] = v[i][2] + mt * force[i][2];
 
-        const double V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
+        V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
 
-        maxV = std::max(maxV, V);
+        maxV = V;
     }
 
     t += timeStepSize;

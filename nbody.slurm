@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name="mmgw12-nbody"
+#SBATCH --job-name="mmgw12-nbody-10"
 #SBATCH -o nbody
 #SBATCH -e nbody.err
 #SBATCH -t 00:05:00
@@ -15,10 +15,10 @@ module load intel/xe_2018.2
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-./solution-step2.o `python2 params.py 100`
+./solution-step2.o `python2 params.py 10`
 
-gprof ./solution-step2.o > step2-100.txt
+gprof ./solution-step2.o > step2-10.txt
 
-./solution-step6.o `python2 params.py 100`
+./solution-step6.o `python2 params.py 10`
 
-gprof ./solution-step6.o > step6-100.txt
+gprof ./solution-step6.o > step6-10.txt

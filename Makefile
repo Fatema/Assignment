@@ -8,3 +8,6 @@ reset: result-*.vtp result.pvd
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(OMP) $(VECREPORT) -o $@ $<
+
+step6-%: solution-step6.o
+	./solution-step6.o `python3 params.py $*`

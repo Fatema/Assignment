@@ -207,7 +207,7 @@ void updateBody() {
     // initialize the values for the forces 2D array
 #pragma omp parallel shared(force, NumberOfBodies)
     {
-#pragma omp for
+#pragma omp for schedule(guided, 14)
         for (int i = 0; i < NumberOfBodies; i++) {
             force[i][0] = 0.0;
             force[i][1] = 0.0;
@@ -216,7 +216,7 @@ void updateBody() {
     }
 
 
-#pragma omp parallel for shared(x, force, NumberOfBodies) private(xi, yi, zi, fx, fy, fz) reduction(min:minDx)
+#pragma omp parallel for schedule(guided, 14) shared(x, force, NumberOfBodies) private(xi, yi, zi, fx, fy, fz) reduction(min:minDx)
     for (int i = 0; i < NumberOfBodies; ++i) {
         xi = x[i][0];
         yi = x[i][1];
@@ -229,7 +229,7 @@ void updateBody() {
         // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
         // http://phycomp.technion.ac.il/~talimu/md2.html
         // the last r is squared because we break the force down to x,y and z components
-#pragma omp parallel for private(xi, yi, zi, dx, dy, dz, F, fr2, fr6, r2) reduction(min:minDx) reduction(+:fx, fy, fz)
+#pragma omp parallel for firstprivate(xi, yi, zi, dx, dy, dz, F, fr2, fr6, r2) reduction(min:minDx) reduction(+:fx, fy, fz)
         for (int j = 0; j < NumberOfBodies; j++) {
             if (i == j) continue;
 
@@ -268,7 +268,7 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
-#pragma omp parallel for shared(x, v, mass, force, NumberOfBodies, timeStepSize) private(mt, V) reduction(max:maxV)
+#pragma omp parallel for schedule(guided, 14) shared(x, v, mass, force, NumberOfBodies, timeStepSize) private(mt, V) reduction(max:maxV)
     for (int i = 0; i < NumberOfBodies; i++) {
 
         x[i][0] = x[i][0] + timeStepSize * v[i][0];

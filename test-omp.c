@@ -195,7 +195,7 @@ void updateBody() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
+    double mt, V;
 
     double epsilon = 1.65e-21;
     double sigma = 3.4e-10;
@@ -215,53 +215,57 @@ void updateBody() {
         }
     }
 
-    for (int i = 0; i < NumberOfBodies; ++i) {
-        xi = x[i][0];
-        yi = x[i][1];
-        zi = x[i][2];
-        fx = 0.0;
-        fy = 0.0;
-        fz = 0.0;
+#pragma omp parallel
+    {
+        double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz;
+#pragma omp parallel for reduction(min:minDx)
+        for (int i = 0; i < NumberOfBodies; ++i) {
+            xi = x[i][0];
+            yi = x[i][1];
+            zi = x[i][2];
+            fx = 0.0;
+            fy = 0.0;
+            fz = 0.0;
 
-        //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
-        // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
-        // http://phycomp.technion.ac.il/~talimu/md2.html
-        // the last r is squared because we break the force down to x,y and z components
-#pragma omp parallel for reduction(+:fx,fy,fz)
-        for (int j = 0; j < NumberOfBodies; j++) {
-            if (i == j) continue;
+            //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
+            // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
+            // http://phycomp.technion.ac.il/~talimu/md2.html
+            // the last r is squared because we break the force down to x,y and z components
+            for (int j = 0; j < NumberOfBodies; j++) {
+                if (i == j) continue;
 
-            dx = xi - x[j][0];
-            dy = yi - x[j][1];
-            dz = zi - x[j][2];
+                dx = xi - x[j][0];
+                dy = yi - x[j][1];
+                dz = zi - x[j][2];
 
-            r2 = dx * dx + dy * dy + dz * dz;
+                r2 = dx * dx + dy * dy + dz * dz;
 
-            fr2 = sigma2 / r2;
-            fr6 = fr2 * fr2 * fr2;
+                fr2 = sigma2 / r2;
+                fr6 = fr2 * fr2 * fr2;
 
-            /**
-             * simplified Lennard-Jones
-             * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
-             * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
-             * fx = -dU/dx = -(x/r) * dU/dr
-             *
-             * finding the square root is an expensive operation so since all components of the force (x,y,z) are
-             * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
-             */
+                /**
+                 * simplified Lennard-Jones
+                 * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
+                 * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
+                 * fx = -dU/dx = -(x/r) * dU/dr
+                 *
+                 * finding the square root is an expensive operation so since all components of the force (x,y,z) are
+                 * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
+                 */
 
-            F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
+                F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
 
-            fx += dx * F;
-            fy += dy * F;
-            fz += dz * F;
+                fx += dx * F;
+                fy += dy * F;
+                fz += dz * F;
 
-            minDx = std::min(minDx, r2);
+                minDx = std::min(minDx, r2);
+            }
+
+            force[i][0] = fx;
+            force[i][1] = fy;
+            force[i][2] = fz;
         }
-
-        force[i][0] = fx;
-        force[i][1] = fy;
-        force[i][2] = fz;
     }
 
     minDx = std::sqrt(minDx);

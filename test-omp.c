@@ -215,7 +215,6 @@ void updateBody() {
         }
     }
 
-
     for (int i = 0; i < NumberOfBodies; ++i) {
         xi = x[i][0];
         yi = x[i][1];
@@ -228,6 +227,7 @@ void updateBody() {
         // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
         // http://phycomp.technion.ac.il/~talimu/md2.html
         // the last r is squared because we break the force down to x,y and z components
+#pragma omp parallel for shared(x, xi, yi, zi, NumberOfBodies) reduction(+:fx,fy,fz) reduction(min:minDx)
         for (int j = 0; j < NumberOfBodies; j++) {
             if (i == j) continue;
 
@@ -337,19 +337,20 @@ int main(int argc, char **argv) {
     }
 
     updateBody();
+    updateBody();
 
 //    while (t <= tFinal) {
 //        updateBody();
 //        timeStepCounter++;
 //        if (t >= tPlot) {
 //            printParaviewSnapshot();
-//            std::cout << "plot next snapshot"
-//                      << ",\t time step=" << timeStepCounter
-//                      << ",\t t=" << t
-//                      << ",\t dt=" << timeStepSize
-//                      << ",\t v_max=" << maxV
-//                      << ",\t dx_min=" << minDx
-//                      << std::endl;
+            std::cout << "plot next snapshot"
+                      << ",\t time step=" << timeStepCounter
+                      << ",\t t=" << t
+                      << ",\t dt=" << timeStepSize
+                      << ",\t v_max=" << maxV
+                      << ",\t dx_min=" << minDx
+                      << std::endl;
 //
 //            tPlot += tPlotDelta;
 //        }

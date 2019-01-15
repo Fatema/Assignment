@@ -218,7 +218,7 @@ void updateBody() {
 #pragma omp parallel
     {
         double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz;
-#pragma omp parallel for reduction(min:minDx)
+#pragma omp parallel for firstprivate(xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz) reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];

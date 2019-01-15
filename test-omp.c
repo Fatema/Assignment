@@ -341,14 +341,28 @@ int main(int argc, char **argv) {
     int timeStepCounter = 0;
 
 
+    std::cout << "\n"
+            << "  Number of processors available = %d\n" << omp_get_num_procs ()
+            << "  Number of threads =              %d\n" << omp_get_max_threads ()
+            << std::endl;
+
     force = new double *[NumberOfBodies];
 
     for (int i = 0; i < NumberOfBodies; ++i) {
         force[i] = new double[3];
     }
 
+    double wtime = omp_get_wtime ();
+
     updateBody();
-    updateBody();
+
+    wtime = omp_get_wtime ( ) - wtime;
+
+    std::cout << "\n"
+                << "  Elapsed time for main computation:\n"
+                << "  %f seconds.\n" << wtime
+                << std::endl;
+
 
 //    while (t <= tFinal) {
 //        updateBody();

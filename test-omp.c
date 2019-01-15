@@ -195,7 +195,7 @@ void updateBody() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    double mt, V;
+    double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;
     double sigma = 3.4e-10;
@@ -215,10 +215,11 @@ void updateBody() {
         }
     }
 
-#pragma omp parallel
+#pragma omp parallel \
+shared(force, x, NumberOfBodies) \
+private(xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz)
     {
-        double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz;
-#pragma omp parallel for firstprivate(xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz) reduction(min:minDx)
+#pragma omp for reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];

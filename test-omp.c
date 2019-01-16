@@ -298,8 +298,6 @@ void updateBodyInner() {
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
-    int numberOfThreads = omp_get_num_procs();
-
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
 #pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies, minDx)
@@ -312,10 +310,12 @@ void updateBodyInner() {
         }
 
         /* private vars */
-        int i, j, id, NumberThreads, ChunkSize, startN, endN;
+        int id, NumberThreads, ChunkSize, startN, endN;
+
         /* ICVs */
         id = omp_get_thread_num();
         NumberThreads = omp_get_num_threads();
+
         /* distribute cols to different threads */
         ChunkSize = NumberOfBodies / NumberThreads;
         startN = id * ChunkSize;
@@ -364,6 +364,7 @@ void updateBodyInner() {
 
                 tempMin = std::min(tempMin, r2);
             }
+
 #pragma omp critical
             minDx = std::min(minDx, tempMin);
 

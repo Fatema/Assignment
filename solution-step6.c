@@ -192,6 +192,8 @@ void printParaviewSnapshot() {
  * This is the only operation you are allowed to change in the assignment.
  */
 void updateBody() {
+    omp_set_num_threads(2);
+
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
@@ -204,8 +206,6 @@ void updateBody() {
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
-    int numberOfThreads = omp_get_num_procs();
-
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
 #pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
@@ -217,8 +217,20 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
-#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) firstprivate(tempMin) reduction(min:minDx)
-        for (int i = 0; i < NumberOfBodies; ++i) {
+        /* private vars */
+        int id, NumberThreads, ChunkSize, startN, endN;
+
+        /* ICVs */
+        id = omp_get_thread_num();
+        NumberThreads = omp_get_num_threads();
+
+        /* distribute cols to different threads */
+        ChunkSize = NumberOfBodies / NumberThreads;
+        startN = id * ChunkSize;
+        endN = (id + 1) * ChunkSize;
+        if (id == NumberThreads - 1) endN = NumberOfBodies;
+
+        for (int i = startN; i < endN; ++i) {
             xi = x[i][0];
             yi = x[i][1];
             zi = x[i][2];
@@ -230,6 +242,7 @@ void updateBody() {
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
+#pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
                 if (i == j) continue;
 
@@ -261,7 +274,8 @@ void updateBody() {
                 tempMin = std::min(tempMin, r2);
             }
 
-            minDx = tempMin;
+#pragma omp critical
+            minDx = std::min(minDx, tempMin);
 
             force[i][0] = fx;
             force[i][1] = fy;
@@ -281,12 +295,13 @@ void updateBody() {
             v[i][1] = v[i][1] + mt * force[i][1];
             v[i][2] = v[i][2] + mt * force[i][2];
 
-            V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
+            V = v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2];
 
-            maxV = V;
+            maxV = std::max(maxV, V);
         }
     }
 
+    maxV = std::sqrt(maxV);
     minDx = std::sqrt(minDx);
 
     t += timeStepSize;

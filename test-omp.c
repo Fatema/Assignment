@@ -195,7 +195,6 @@ void updateBodyOuter() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    double tempMin = minDx;
     double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;

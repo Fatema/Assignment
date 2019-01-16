@@ -228,7 +228,7 @@ void updateBodyOuter() {
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
             for (int j = 0; j < NumberOfBodies; j++) {
-                std::cout << i << " i " << j << " j\n" << std::endl;
+//                std::cout << i << " i " << j << " j\n" << std::endl;
 
                 if (i == j) continue;
 

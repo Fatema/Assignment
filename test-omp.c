@@ -458,7 +458,9 @@ int main(int argc, char **argv) {
               << ",\t v_max=" << maxV
               << ",\t dx_min=" << minDx
               << std::endl;
-    
+
+    wtime = omp_get_wtime ();
+
     updateBodyInner();
 
     wtime = omp_get_wtime ( ) - wtime;

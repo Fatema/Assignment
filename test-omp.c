@@ -195,6 +195,7 @@ void updateBody() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
+    double tempMin;
     double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;
@@ -214,18 +215,24 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
-#pragma omp for private(dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx) reduction(+:force[i][0], force[i][1], force[i][2]) collapse(2)
         for (int i = 0; i < NumberOfBodies; ++i) {
+            xi = x[i][0];
+            yi = x[i][1];
+            zi = x[i][2];
+            fx = 0.0;
+            fy = 0.0;
+            fz = 0.0;
             //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
+#pragma omp for private(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
                 if (i == j) continue;
 
-                dx = x[i][0] - x[j][0];
-                dy = x[i][1] - x[j][1];
-                dz = x[i][2] - x[j][2];
+                dx = xi - x[j][0];
+                dy = yi - x[j][1];
+                dz = zi - x[j][2];
 
                 r2 = dx * dx + dy * dy + dz * dz;
 
@@ -244,12 +251,18 @@ void updateBody() {
 
                 F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
 
-                force[i][0] += dx * F;
-                force[i][1] += dy * F;
-                force[i][2] += dz * F;
+                fx += dx * F;
+                fy += dy * F;
+                fz += dz * F;
 
-                minDx = std::min(minDx, r2);
+                tempMin = std::min(tempMin, r2);
             }
+
+            minDx = std::min(minDx, tempMin);
+
+            force[i][0] = fx;
+            force[i][1] = fy;
+            force[i][2] = fz;
         }
 
     minDx = std::sqrt(minDx);

@@ -442,7 +442,7 @@ int main(int argc, char **argv) {
 
     double wtime = omp_get_wtime ();
 
-    updateBodyOuter();
+    updateBodyInner();
 
     wtime = omp_get_wtime ( ) - wtime;
 
@@ -461,7 +461,7 @@ int main(int argc, char **argv) {
 
     wtime = omp_get_wtime ();
 
-    updateBodyInner();
+    updateBodyOuter();
 
     wtime = omp_get_wtime ( ) - wtime;
 

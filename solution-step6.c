@@ -259,7 +259,6 @@ void updateBody() {
                 fz += dz * F;
 
                 tempMin = std::min(tempMin, r2);
-//                std::cout << r2 << " " << tempMin << "minimum distance" << std::endl;
             }
 
             minDx = tempMin;
@@ -289,7 +288,6 @@ void updateBody() {
     }
 
     minDx = std::sqrt(minDx);
-//    std::cout << minDx << "square root minimum distance" << std::endl;
 
     t += timeStepSize;
 }

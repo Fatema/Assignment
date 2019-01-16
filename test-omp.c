@@ -311,7 +311,18 @@ void updateBodyInner() {
             force[i][2] = 0.0;
         }
 
-        for (int i = 0; i < NumberOfBodies; ++i) {
+        /* private vars */
+        int i, j, id, NumberThreads, ChunkSize, startN, endN;
+        /* ICVs */
+        id = omp_get_thread_num();
+        NumberThreads = omp_get_num_threads();
+        /* distribute cols to different threads */
+        ChunkSize = NumberOfBodies / NumberThreads;
+        startN = id * ChunkSize;
+        endN = (id + 1) * ChunkSize;
+        if (id == NumberThreads - 1) endN = NumberOfBodies;
+
+        for (int i = startN; i < endN; ++i) {
             xi = x[i][0];
             yi = x[i][1];
             zi = x[i][2];
@@ -322,7 +333,7 @@ void updateBodyInner() {
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
-#pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
+#pragma omp for private(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
                 if (i == j) continue;
 

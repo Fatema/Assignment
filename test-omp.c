@@ -214,7 +214,7 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
-#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx)
+#pragma omp for private(xi, yi, zi) reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];
@@ -227,7 +227,7 @@ void updateBody() {
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
-#pragma omp for private(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx) reduction(+:fx,fy,fz)
+#pragma omp for private(dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
                 if (i == j) continue;
 

@@ -192,8 +192,6 @@ void printParaviewSnapshot() {
  * This is the only operation you are allowed to change in the assignment.
  */
 void updateBody() {
-    omp_set_num_threads(2);
-
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
@@ -217,20 +215,8 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
-        /* private vars */
-        int id, NumberThreads, ChunkSize, startN, endN;
-
-        /* ICVs */
-        id = omp_get_thread_num();
-        NumberThreads = omp_get_num_threads();
-
-        /* distribute cols to different threads */
-        ChunkSize = NumberOfBodies / NumberThreads;
-        startN = id * ChunkSize;
-        endN = (id + 1) * ChunkSize;
-        if (id == NumberThreads - 1) endN = NumberOfBodies;
-
-        for (int i = startN; i < endN; ++i) {
+#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F, tempMin) reduction(min:minDx)
+        for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];
             zi = x[i][2];
@@ -242,7 +228,6 @@ void updateBody() {
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
-#pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
                 if (i == j) continue;
 
@@ -271,11 +256,8 @@ void updateBody() {
                 fy += dy * F;
                 fz += dz * F;
 
-                tempMin = std::min(tempMin, r2);
+                minDx = std::min(minDx, r2);
             }
-
-#pragma omp critical
-            minDx = std::min(minDx, tempMin);
 
             force[i][0] = fx;
             force[i][1] = fy;

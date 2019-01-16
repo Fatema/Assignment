@@ -205,20 +205,15 @@ void updateBody() {
 
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
-#pragma omp parallel shared(force, NumberOfBodies)
-    {
+#pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
+{
 #pragma omp for
         for (int i = 0; i < NumberOfBodies; i++) {
             force[i][0] = 0.0;
             force[i][1] = 0.0;
             force[i][2] = 0.0;
         }
-    }
 
-//#pragma omp parallel \
-//shared(force, x, NumberOfBodies) \
-//private(xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz)
-//    {
 //#pragma omp for reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
@@ -267,15 +262,10 @@ void updateBody() {
             force[i][1] = fy;
             force[i][2] = fz;
         }
-//    }
 
     minDx = std::sqrt(minDx);
 
-#pragma omp parallel \
-shared(force, x, v, mass, timeStepSize, NumberOfBodies) \
-private(mt)
-    {
-#pragma omp for reduction(max:maxV)
+#pragma omp for private(mt, V) reduction(max:maxV)
         for (int i = 0; i < NumberOfBodies; i++) {
 
             x[i][0] = x[i][0] + timeStepSize * v[i][0];
@@ -342,8 +332,8 @@ int main(int argc, char **argv) {
 
 
     std::cout << "\n"
-            << "  Number of processors available = %d\n" << omp_get_num_procs ()
-            << "  Number of threads =              %d\n" << omp_get_max_threads ()
+            << "  Number of processors available = " << omp_get_num_procs ()
+            << "  Number of threads =              " << omp_get_max_threads ()
             << std::endl;
 
     force = new double *[NumberOfBodies];
@@ -360,7 +350,7 @@ int main(int argc, char **argv) {
 
     std::cout << "\n"
                 << "  Elapsed time for main computation:\n"
-                << "  %f seconds.\n" << wtime
+                << wtime << " seconds.\n"
                 << std::endl;
 
 

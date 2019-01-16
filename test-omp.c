@@ -215,6 +215,7 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
+#pragma omp for reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];

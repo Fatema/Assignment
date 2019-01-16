@@ -217,7 +217,7 @@ void updateBody() {
             force[i][2] = 0.0;
         }
 
-#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx)
+#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) firstprivate(tempMin) reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];
@@ -259,6 +259,7 @@ void updateBody() {
                 fz += dz * F;
 
                 tempMin = std::min(tempMin, r2);
+//                std::cout << r2 << " " << tempMin << "minimum distance" << std::endl;
             }
 
             minDx = tempMin;
@@ -267,8 +268,6 @@ void updateBody() {
             force[i][1] = fy;
             force[i][2] = fz;
         }
-
-        minDx = std::sqrt(minDx);
 
 #pragma omp for private(mt, V) reduction(max:maxV)
         for (int i = 0; i < NumberOfBodies; i++) {
@@ -288,6 +287,9 @@ void updateBody() {
             maxV = V;
         }
     }
+
+    minDx = std::sqrt(minDx);
+//    std::cout << minDx << "square root minimum distance" << std::endl;
 
     t += timeStepSize;
 }

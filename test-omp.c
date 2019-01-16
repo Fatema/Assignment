@@ -195,6 +195,7 @@ void updateBodyOuter() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
+    double tempMin = minDx;
     double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;
@@ -214,7 +215,7 @@ void updateBodyOuter() {
             force[i][2] = 0.0;
         }
 
-#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx)
+#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F, tempMin) reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];
@@ -262,8 +263,6 @@ void updateBodyOuter() {
             force[i][2] = fz;
         }
 
-    minDx = std::sqrt(minDx);
-
 #pragma omp for private(mt, V) reduction(max:maxV)
         for (int i = 0; i < NumberOfBodies; i++) {
 
@@ -282,6 +281,8 @@ void updateBodyOuter() {
             maxV = std::max(maxV, V);
         }
     }
+
+    minDx = std::sqrt(minDx);
 
     t += timeStepSize;
 }

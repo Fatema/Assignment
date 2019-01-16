@@ -361,8 +361,6 @@ void updateBodyInner() {
             force[i][2] = fz;
         }
 
-    minDx = std::sqrt(minDx);
-
 #pragma omp for private(mt, V) reduction(max:maxV)
         for (int i = 0; i < NumberOfBodies; i++) {
 
@@ -381,6 +379,8 @@ void updateBodyInner() {
             maxV = std::max(maxV, V);
         }
     }
+
+    minDx = std::sqrt(minDx);
 
     t += timeStepSize;
 }

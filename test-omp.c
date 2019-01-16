@@ -302,7 +302,7 @@ void updateBodyInner() {
 
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
-#pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
+#pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies, minDx)
 {
 #pragma omp for
         for (int i = 0; i < NumberOfBodies; i++) {
@@ -364,7 +364,7 @@ void updateBodyInner() {
 
                 tempMin = std::min(tempMin, r2);
             }
-
+#pragma omp critical
             minDx = std::min(minDx, tempMin);
 
             force[i][0] = fx;

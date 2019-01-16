@@ -207,14 +207,14 @@ void updateBody() {
     // initialize the values for the forces 2D array
 #pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
 {
-#pragma omp for schedule(static, 14)
+#pragma omp for
         for (int i = 0; i < NumberOfBodies; i++) {
             force[i][0] = 0.0;
             force[i][1] = 0.0;
             force[i][2] = 0.0;
         }
 
-//#pragma omp for reduction(min:minDx)
+#pragma omp for private(xi, yi, zi, fx, fy, fz, dx, dy, dz, r2, fr2, fr6, F) reduction(min:minDx)
         for (int i = 0; i < NumberOfBodies; ++i) {
             xi = x[i][0];
             yi = x[i][1];
@@ -265,7 +265,7 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
-#pragma omp for schedule(static, 14) private(mt, V) reduction(max:maxV)
+#pragma omp for private(mt, V) reduction(max:maxV)
         for (int i = 0; i < NumberOfBodies; i++) {
 
             x[i][0] = x[i][0] + timeStepSize * v[i][0];

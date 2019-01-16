@@ -191,7 +191,7 @@ void printParaviewSnapshot() {
 /**
  * This is the only operation you are allowed to change in the assignment.
  */
-void updateBody() {
+void updateBodyOuter() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
@@ -287,6 +287,104 @@ void updateBody() {
     t += timeStepSize;
 }
 
+void updateBodyInner() {
+    maxV = 0.0;
+    minDx = std::numeric_limits<double>::max();
+
+    double tempMin = minDx;
+    double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
+
+    double epsilon = 1.65e-21;
+    double sigma = 3.4e-10;
+    double sigma2 = sigma * sigma;
+
+    int numberOfThreads = omp_get_num_procs();
+
+    // to avoid declaring the force for every run of UpdateBody it has been set on the class level
+    // initialize the values for the forces 2D array
+#pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
+{
+#pragma omp for
+        for (int i = 0; i < NumberOfBodies; i++) {
+            force[i][0] = 0.0;
+            force[i][1] = 0.0;
+            force[i][2] = 0.0;
+        }
+
+        for (int i = 0; i < NumberOfBodies; ++i) {
+            xi = x[i][0];
+            yi = x[i][1];
+            zi = x[i][2];
+            fx = 0.0;
+            fy = 0.0;
+            fz = 0.0;
+            //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
+            // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
+            // http://phycomp.technion.ac.il/~talimu/md2.html
+            // the last r is squared because we break the force down to x,y and z components
+#pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
+            for (int j = 0; j < NumberOfBodies; j++) {
+                if (i == j) continue;
+
+                dx = xi - x[j][0];
+                dy = yi - x[j][1];
+                dz = zi - x[j][2];
+
+                r2 = dx * dx + dy * dy + dz * dz;
+
+                fr2 = sigma2 / r2;
+                fr6 = fr2 * fr2 * fr2;
+
+                /**
+                 * simplified Lennard-Jones
+                 * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
+                 * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
+                 * fx = -dU/dx = -(x/r) * dU/dr
+                 *
+                 * finding the square root is an expensive operation so since all components of the force (x,y,z) are
+                 * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
+                 */
+
+                F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
+
+                fx += dx * F;
+                fy += dy * F;
+                fz += dz * F;
+
+                tempMin = std::min(tempMin, r2);
+            }
+
+            minDx = std::min(minDx, tempMin);
+
+            force[i][0] = fx;
+            force[i][1] = fy;
+            force[i][2] = fz;
+        }
+
+    minDx = std::sqrt(minDx);
+
+#pragma omp for private(mt, V) reduction(max:maxV)
+        for (int i = 0; i < NumberOfBodies; i++) {
+
+            x[i][0] = x[i][0] + timeStepSize * v[i][0];
+            x[i][1] = x[i][1] + timeStepSize * v[i][1];
+            x[i][2] = x[i][2] + timeStepSize * v[i][2];
+
+            mt = timeStepSize / mass[i];
+
+            v[i][0] = v[i][0] + mt * force[i][0];
+            v[i][1] = v[i][1] + mt * force[i][1];
+            v[i][2] = v[i][2] + mt * force[i][2];
+
+            V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
+
+            maxV = std::max(maxV, V);
+        }
+    }
+
+    t += timeStepSize;
+}
+
 
 /**
  * Main routine.
@@ -344,12 +442,29 @@ int main(int argc, char **argv) {
 
     double wtime = omp_get_wtime ();
 
-    updateBody();
+    updateBodyOuter();
 
     wtime = omp_get_wtime ( ) - wtime;
 
     std::cout << "\n"
-                << "  Elapsed time for main computation:\n"
+                << "  Elapsed time for Outer computation:\n"
+                << wtime << " seconds.\n"
+                << std::endl;
+
+    std::cout << "plot next snapshot"
+              << ",\t time step=" << timeStepCounter
+              << ",\t t=" << t
+              << ",\t dt=" << timeStepSize
+              << ",\t v_max=" << maxV
+              << ",\t dx_min=" << minDx
+              << std::endl;
+    
+    updateBodyInner();
+
+    wtime = omp_get_wtime ( ) - wtime;
+
+    std::cout << "\n"
+                << "  Elapsed time for Inner computation:\n"
                 << wtime << " seconds.\n"
                 << std::endl;
 

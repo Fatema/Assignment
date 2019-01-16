@@ -324,7 +324,7 @@ void updateBodyInner() {
         endN = (id + 1) * ChunkSize;
         if (id == NumberThreads - 1) endN = NumberOfBodies;
 
-        std::cout << startN << " startN " << endN << " endN\n" << std::endl;
+//        std::cout << startN << " startN " << endN << " endN\n" << std::endl;
 
         for (int i = startN; i < endN; ++i) {
             xi = x[i][0];
@@ -333,14 +333,14 @@ void updateBodyInner() {
             fx = 0.0;
             fy = 0.0;
             fz = 0.0;
-            std::cout << NumberOfBodies << " number of bodies\n" << std::endl;
+//            std::cout << NumberOfBodies << " number of bodies\n" << std::endl;
             //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
             // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
             // http://phycomp.technion.ac.il/~talimu/md2.html
             // the last r is squared because we break the force down to x,y and z components
 #pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
             for (int j = 0; j < NumberOfBodies; j++) {
-                std::cout << i << " i " << j << " j\n" << std::endl;
+//                std::cout << i << " i " << j << " j\n" << std::endl;
 
                 if (i == j) continue;
 
@@ -370,13 +370,13 @@ void updateBodyInner() {
                 fz += dz * F;
 
                 tempMin = std::min(tempMin, r2);
-                std::cout << r2 << " " << tempMin << "inner minimum distance\n" << std::endl;
+//                std::cout << r2 << " " << tempMin << "inner minimum distance\n" << std::endl;
             }
 
 //#pragma omp critical
             minDx = std::min(minDx, tempMin);
 
-            std::cout << minDx << "minimum distance" << std::endl;
+//            std::cout << minDx << "minimum distance" << std::endl;
 
             force[i][0] = fx;
             force[i][1] = fy;

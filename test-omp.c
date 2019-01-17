@@ -278,6 +278,8 @@ void updateBodyOuter() {
             v[i][1] = v[i][1] + mt * force[i][1];
             v[i][2] = v[i][2] + mt * force[i][2];
 
+            V = v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2];
+
             maxV = std::max(maxV, V);
         }
     }
@@ -359,6 +361,8 @@ void updateBodyInner() {
         v[i][0] = v[i][0] + mt * force[i][0];
         v[i][1] = v[i][1] + mt * force[i][1];
         v[i][2] = v[i][2] + mt * force[i][2];
+
+        V = v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2];
 
         maxV = std::max(maxV, V);
     }

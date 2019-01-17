@@ -294,7 +294,6 @@ void updateBodyInner() {
     maxV = 0.0;
     minDx = std::numeric_limits<double>::max();
 
-    double tempMin = minDx;
     double xi, yi, zi, dx, dy, dz, r2, F, fr2, fr6, fx, fy, fz, mt, V;
 
     double epsilon = 1.65e-21;
@@ -340,10 +339,8 @@ void updateBodyInner() {
             fy += dy * F;
             fz += dz * F;
 
-            tempMin = std::min(tempMin, r2);
+            minDx = std::min(minDx, r2);
         }
-
-        minDx = std::min(minDx, tempMin);
 
         force[i][0] = fx;
         force[i][1] = fy;

@@ -14,40 +14,40 @@ module load intel/xe_2018.2
 
 export OMP_NUM_THREADS=1
 
-./temp-omp.o `python2 params.py 10`
-./temp-omp.o `python2 params.py 100`
-./temp-omp.o `python2 params.py 1000`
-./temp-omp.o `python2 params.py 10000`
-./temp-omp.o `python2 params.py 100000`
+./test-omp.o `python2 params.py 10`
+./test-omp.o `python2 params.py 100`
+./test-omp.o `python2 params.py 1000`
+./test-omp.o `python2 params.py 10000`
+./test-omp.o `python2 params.py 100000`
 
 export OMP_NUM_THREADS=2
 
-./temp-omp.o `python2 params.py 10`
-./temp-omp.o `python2 params.py 100`
-./temp-omp.o `python2 params.py 1000`
-./temp-omp.o `python2 params.py 10000`
-./temp-omp.o `python2 params.py 100000`
+./test-omp.o `python2 params.py 10`
+./test-omp.o `python2 params.py 100`
+./test-omp.o `python2 params.py 1000`
+./test-omp.o `python2 params.py 10000`
+./test-omp.o `python2 params.py 100000`
 
 export OMP_NUM_THREADS=4
 
-./temp-omp.o `python2 params.py 10`
-./temp-omp.o `python2 params.py 100`
-./temp-omp.o `python2 params.py 1000`
-./temp-omp.o `python2 params.py 10000`
-./temp-omp.o `python2 params.py 100000`
+./test-omp.o `python2 params.py 10`
+./test-omp.o `python2 params.py 100`
+./test-omp.o `python2 params.py 1000`
+./test-omp.o `python2 params.py 10000`
+./test-omp.o `python2 params.py 100000`
 
 export OMP_NUM_THREADS=8
 
-./temp-omp.o `python2 params.py 10`
-./temp-omp.o `python2 params.py 100`
-./temp-omp.o `python2 params.py 1000`
-./temp-omp.o `python2 params.py 10000`
-./temp-omp.o `python2 params.py 100000`
+./test-omp.o `python2 params.py 10`
+./test-omp.o `python2 params.py 100`
+./test-omp.o `python2 params.py 1000`
+./test-omp.o `python2 params.py 10000`
+./test-omp.o `python2 params.py 100000`
 
 export OMP_NUM_THREADS=16
 
-./temp-omp.o `python2 params.py 10`
-./temp-omp.o `python2 params.py 100`
-./temp-omp.o `python2 params.py 1000`
-./temp-omp.o `python2 params.py 10000`
-./temp-omp.o `python2 params.py 100000`
+./test-omp.o `python2 params.py 10`
+./test-omp.o `python2 params.py 100`
+./test-omp.o `python2 params.py 1000`
+./test-omp.o `python2 params.py 10000`
+./test-omp.o `python2 params.py 100000`

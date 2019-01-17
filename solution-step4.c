@@ -28,6 +28,8 @@ double tPlotDelta = 0;
 
 int NumberOfBodies = 0;
 
+double U = 0;
+
 /**
  * Pointer to pointers. Each pointer in turn points to three coordinates, i.e.
  * each pointer represents one molecule/particle/body.
@@ -219,6 +221,7 @@ void updateBody() {
         fx = 0.0;
         fy = 0.0;
         fz = 0.0;
+        U = 0.0;
 
         //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
         // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
@@ -247,6 +250,7 @@ void updateBody() {
              */
 
             F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
+            U += 4 * epsilon * fr6 * (fr6 - 1);
 
             fx += dx * F;
             fy += dy * F;
@@ -262,11 +266,27 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
+    double mint = 1e-7;
+    double dtScaling = 1.0;
 
-    double mint = 1e-8;
+    // there is a chance that the particles might jump into each other (penetrate) or jump through each other
+    while (maxV > 0 && dtScaling * timeStepSize * maxV >= minDx) {
+        dtScaling /= 2.0;
+    }
+
+    if (dtScaling >= 1.0){
+        dtScaling = 1.1;
+    }
+
+    timeStepSize *= dtScaling;
+
+    // the force significantly increase reaching a maximum value
+    // threshold can be determined by setting the force to be 0
+    if(minDx < 1e-9 || timeStepSize < 1e-18) {
+        timeStepSize = mint;
+    }
 
     for (i = 0; i < NumberOfBodies; i++) {
-
 
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
@@ -347,6 +367,7 @@ int main(int argc, char **argv) {
                       << ",\t dt=" << timeStepSize
                       << ",\t v_max=" << maxV
                       << ",\t dx_min=" << minDx
+                      << ",\t U=" << U
                       << ",\t force=" << force[1][0] << " " << force[1][1] << " " << force[1][2]
                       << std::endl;
 

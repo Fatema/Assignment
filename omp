@@ -1,0 +1,350 @@
+created setup with 10 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              1
+
+  Elapsed time for serial computation:
+3.1814e-06 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+2.4749e-05 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 100 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              1
+
+  Elapsed time for serial computation:
+0.000110134 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000120038 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 1000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              1
+
+  Elapsed time for serial computation:
+0.0199244 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.0173634 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              1
+
+  Elapsed time for serial computation:
+1.08007 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.836319 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 100000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              1
+
+  Elapsed time for serial computation:
+86.4388 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+85.8522 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              2
+
+  Elapsed time for serial computation:
+4.34369e-06 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000141116 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 100 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              2
+
+  Elapsed time for serial computation:
+0.000118714 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000251217 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 1000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              2
+
+  Elapsed time for serial computation:
+0.0208582 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.0102346 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              2
+
+  Elapsed time for serial computation:
+1.09106 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.598624 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 100000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              2
+
+  Elapsed time for serial computation:
+85.0273 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+44.1158 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              4
+
+  Elapsed time for serial computation:
+3.39374e-06 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000137836 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 100 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              4
+
+  Elapsed time for serial computation:
+0.000110283 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000194034 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 1000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              4
+
+  Elapsed time for serial computation:
+0.0206741 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.00509077 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              4
+
+  Elapsed time for serial computation:
+1.15357 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.318269 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 100000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              4
+
+  Elapsed time for serial computation:
+85.165 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+22.6334 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              8
+
+  Elapsed time for serial computation:
+3.42913e-06 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.00020092 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 100 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              8
+
+  Elapsed time for serial computation:
+0.000106996 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000236925 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 1000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              8
+
+  Elapsed time for serial computation:
+0.0206847 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.00318944 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              8
+
+  Elapsed time for serial computation:
+1.07835 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.180262 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 100000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              8
+
+  Elapsed time for serial computation:
+84.9027 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+11.9492 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              16
+
+  Elapsed time for serial computation:
+4.41819e-06 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000408215 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 100 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              16
+
+  Elapsed time for serial computation:
+0.000124311 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+
+  Elapsed time for Outer computation:
+0.000313766 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=5e-09
+created setup with 1000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              16
+
+  Elapsed time for serial computation:
+0.0206808 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.0020295 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 10000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              16
+
+  Elapsed time for serial computation:
+0.895323 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+0.102834 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+created setup with 100000 bodies
+plotting switched off
+
+  Number of processors available = 32  Number of threads =              16
+
+  Elapsed time for serial computation:
+84.847 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0001,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0
+
+  Elapsed time for Outer computation:
+6.51041 seconds.
+
+plot next snapshot,	 time step=0,	 t=0.0002,	 dt=0.0001,	 v_max=1.41421e-12,	 dx_min=0

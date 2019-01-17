@@ -6,7 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("nbody", help="number of random bodies to generate")
 args = parser.parse_args()
 
-params = "0 1e4"
+params = "0 1e3"
 xoffset = 0
 yoffset = 0
 x = 0

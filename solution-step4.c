@@ -263,7 +263,10 @@ void updateBody() {
     minDx = std::sqrt(minDx);
 
 
+    double mint = 1e-8;
+
     for (i = 0; i < NumberOfBodies; i++) {
+
 
         x[i][0] = x[i][0] + timeStepSize * v[i][0];
         x[i][1] = x[i][1] + timeStepSize * v[i][1];
@@ -344,6 +347,7 @@ int main(int argc, char **argv) {
                       << ",\t dt=" << timeStepSize
                       << ",\t v_max=" << maxV
                       << ",\t dx_min=" << minDx
+                      << ",\t force=" << force[1][0] << " " << force[1][1] << " " << force[1][2]
                       << std::endl;
 
             tPlot += tPlotDelta;

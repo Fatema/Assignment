@@ -72,11 +72,11 @@ void setUp(int argc, char **argv) {
     NumberOfBodies = (argc - 2) / 7;
 
     x = new
-            double *[NumberOfBodies];
+    double *[NumberOfBodies];
     v = new
-            double *[NumberOfBodies];
+    double *[NumberOfBodies];
     mass = new
-            double[NumberOfBodies];
+    double[NumberOfBodies];
 
     int readArgument = 1;
 
@@ -87,9 +87,9 @@ void setUp(int argc, char **argv) {
 
     for (int i = 0; i < NumberOfBodies; i++) {
         x[i] = new
-                double[3];
+        double[3];
         v[i] = new
-                double[3];
+        double[3];
 
         x[i][0] = std::stof(argv[readArgument]);
         readArgument++;
@@ -161,7 +161,7 @@ void printParaviewSnapshot() {
     std::stringstream filename;
     filename << "result-" << counter << ".vtp";
     std::ofstream
-            out(filename.str().c_str());
+    out(filename.str().c_str());
     out << "<VTKFile type=\"PolyData\" >" << std::endl
         << "<PolyData>" << std::endl
         << " <Piece NumberOfPoints=\"" << NumberOfBodies << "\">" << std::endl
@@ -207,7 +207,7 @@ void updateBodyOuter() {
     // to avoid declaring the force for every run of UpdateBody it has been set on the class level
     // initialize the values for the forces 2D array
 #pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies)
-{
+    {
 #pragma omp for
         for (int i = 0; i < NumberOfBodies; i++) {
             force[i][0] = 0.0;
@@ -278,12 +278,11 @@ void updateBodyOuter() {
             v[i][1] = v[i][1] + mt * force[i][1];
             v[i][2] = v[i][2] + mt * force[i][2];
 
-            V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
-
             maxV = std::max(maxV, V);
         }
     }
 
+    maxV = std::sqrt(maxV);
     minDx = std::sqrt(minDx);
 
     t += timeStepSize;
@@ -300,108 +299,71 @@ void updateBodyInner() {
     double sigma = 3.4e-10;
     double sigma2 = sigma * sigma;
 
-    // to avoid declaring the force for every run of UpdateBody it has been set on the class level
-    // initialize the values for the forces 2D array
-#pragma omp parallel shared(force, x, v, mass, timeStepSize, NumberOfBodies, minDx)
-{
-#pragma omp for
-        for (int i = 0; i < NumberOfBodies; i++) {
-            force[i][0] = 0.0;
-            force[i][1] = 0.0;
-            force[i][2] = 0.0;
+    for (int i = 0; i < NumberOfBodies; ++i) {
+        xi = x[i][0];
+        yi = x[i][1];
+        zi = x[i][2];
+        fx = 0.0;
+        fy = 0.0;
+        fz = 0.0;
+        //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
+        // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
+        // http://phycomp.technion.ac.il/~talimu/md2.html
+        // the last r is squared because we break the force down to x,y and z components
+        for (int j = 0; j < NumberOfBodies; j++) {
+            if (i == j) continue;
+
+            dx = xi - x[j][0];
+            dy = yi - x[j][1];
+            dz = zi - x[j][2];
+
+            r2 = dx * dx + dy * dy + dz * dz;
+
+            fr2 = sigma2 / r2;
+            fr6 = fr2 * fr2 * fr2;
+
+            /**
+             * simplified Lennard-Jones
+             * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
+             * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
+             * fx = -dU/dx = -(x/r) * dU/dr
+             *
+             * finding the square root is an expensive operation so since all components of the force (x,y,z) are
+             * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
+             */
+
+            F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
+
+            fx += dx * F;
+            fy += dy * F;
+            fz += dz * F;
+
+            tempMin = std::min(tempMin, r2);
         }
 
-        /* private vars */
-        int id, NumberThreads, ChunkSize, startN, endN;
+        minDx = std::min(minDx, tempMin);
 
-        /* ICVs */
-        id = omp_get_thread_num();
-        NumberThreads = omp_get_num_threads();
-
-        /* distribute cols to different threads */
-        ChunkSize = NumberOfBodies / NumberThreads;
-        startN = id * ChunkSize;
-        endN = (id + 1) * ChunkSize;
-        if (id == NumberThreads - 1) endN = NumberOfBodies;
-
-//        std::cout << startN << " startN " << endN << " endN\n" << std::endl;
-
-        for (int i = startN; i < endN; ++i) {
-            xi = x[i][0];
-            yi = x[i][1];
-            zi = x[i][2];
-            fx = 0.0;
-            fy = 0.0;
-            fz = 0.0;
-//            std::cout << NumberOfBodies << " number of bodies\n" << std::endl;
-            //reference for step2 http://phys.ubbcluj.ro/~tbeu/MD/C2_for.pdf
-            // http://courses.cs.vt.edu/cs4414/S15/LECTURES/MolecularDynamics.pdf
-            // http://phycomp.technion.ac.il/~talimu/md2.html
-            // the last r is squared because we break the force down to x,y and z components
-#pragma omp for firstprivate(xi, yi, zi, dx, dy, dz, r2, fr2, fr6, F) reduction(min:tempMin) reduction(+:fx,fy,fz)
-            for (int j = 0; j < NumberOfBodies; j++) {
-//                std::cout << i << " i " << j << " j\n" << std::endl;
-
-                if (i == j) continue;
-
-                dx = xi - x[j][0];
-                dy = yi - x[j][1];
-                dz = zi - x[j][2];
-
-                r2 = dx * dx + dy * dy + dz * dz;
-
-                fr2 = sigma2 / r2;
-                fr6 = fr2 * fr2 * fr2;
-
-                /**
-                 * simplified Lennard-Jones
-                 * U = 4 * epsilon * ((sigma/r)^12 - (sigma/r)^6)
-                 * f = -dU/dr = 48 * epsilon * (sigma/r)^6 * ((sigma/r)^6 - 0.5) / r
-                 * fx = -dU/dx = -(x/r) * dU/dr
-                 *
-                 * finding the square root is an expensive operation so since all components of the force (x,y,z) are
-                 * divided by r, the force is divided by r2 as it is already computed from dx, dy and dz
-                 */
-
-                F = 48.0 * epsilon * fr6 * (fr6 - 0.5) / r2;
-
-                fx += dx * F;
-                fy += dy * F;
-                fz += dz * F;
-
-                tempMin = std::min(tempMin, r2);
-//                std::cout << r2 << " " << tempMin << "inner minimum distance\n" << std::endl;
-            }
-
-//#pragma omp critical
-            minDx = std::min(minDx, tempMin);
-
-//            std::cout << minDx << "minimum distance" << std::endl;
-
-            force[i][0] = fx;
-            force[i][1] = fy;
-            force[i][2] = fz;
-        }
-
-#pragma omp for private(mt, V) reduction(max:maxV)
-        for (int i = 0; i < NumberOfBodies; i++) {
-
-            x[i][0] = x[i][0] + timeStepSize * v[i][0];
-            x[i][1] = x[i][1] + timeStepSize * v[i][1];
-            x[i][2] = x[i][2] + timeStepSize * v[i][2];
-
-            mt = timeStepSize / mass[i];
-
-            v[i][0] = v[i][0] + mt * force[i][0];
-            v[i][1] = v[i][1] + mt * force[i][1];
-            v[i][2] = v[i][2] + mt * force[i][2];
-
-            V = std::sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2]);
-
-            maxV = std::max(maxV, V);
-        }
+        force[i][0] = fx;
+        force[i][1] = fy;
+        force[i][2] = fz;
     }
 
+    for (int i = 0; i < NumberOfBodies; i++) {
+
+        x[i][0] = x[i][0] + timeStepSize * v[i][0];
+        x[i][1] = x[i][1] + timeStepSize * v[i][1];
+        x[i][2] = x[i][2] + timeStepSize * v[i][2];
+
+        mt = timeStepSize / mass[i];
+
+        v[i][0] = v[i][0] + mt * force[i][0];
+        v[i][1] = v[i][1] + mt * force[i][1];
+        v[i][2] = v[i][2] + mt * force[i][2];
+
+        maxV = std::max(maxV, V);
+    }
+
+    maxV = std::sqrt(maxV);
     minDx = std::sqrt(minDx);
 
     t += timeStepSize;
@@ -452,26 +414,28 @@ int main(int argc, char **argv) {
 
 
     std::cout << "\n"
-            << "  Number of processors available = " << omp_get_num_procs ()
-            << "  Number of threads =              " << omp_get_max_threads ()
-            << std::endl;
+              << "  Number of processors available = " << omp_get_num_procs()
+              << "  Number of threads =              " << omp_get_max_threads()
+              << std::endl;
 
-    force = new double *[NumberOfBodies];
+    force = new
+    double *[NumberOfBodies];
 
     for (int i = 0; i < NumberOfBodies; ++i) {
-        force[i] = new double[3];
+        force[i] = new
+        double[3];
     }
 
-    double wtime = omp_get_wtime ();
+    double wtime = omp_get_wtime();
 
     updateBodyInner();
 
-    wtime = omp_get_wtime ( ) - wtime;
+    wtime = omp_get_wtime() - wtime;
 
     std::cout << "\n"
-                << "  Elapsed time for Outer computation:\n"
-                << wtime << " seconds.\n"
-                << std::endl;
+              << "  Elapsed time for serial computation:\n"
+              << wtime << " seconds.\n"
+              << std::endl;
 
     std::cout << "plot next snapshot"
               << ",\t time step=" << timeStepCounter
@@ -481,16 +445,16 @@ int main(int argc, char **argv) {
               << ",\t dx_min=" << minDx
               << std::endl;
 
-    wtime = omp_get_wtime ();
+    wtime = omp_get_wtime();
 
     updateBodyOuter();
 
-    wtime = omp_get_wtime ( ) - wtime;
+    wtime = omp_get_wtime() - wtime;
 
     std::cout << "\n"
-                << "  Elapsed time for Inner computation:\n"
-                << wtime << " seconds.\n"
-                << std::endl;
+              << "  Elapsed time for Outer computation:\n"
+              << wtime << " seconds.\n"
+              << std::endl;
 
 
 //    while (t <= tFinal) {
@@ -498,13 +462,13 @@ int main(int argc, char **argv) {
 //        timeStepCounter++;
 //        if (t >= tPlot) {
 //            printParaviewSnapshot();
-            std::cout << "plot next snapshot"
-                      << ",\t time step=" << timeStepCounter
-                      << ",\t t=" << t
-                      << ",\t dt=" << timeStepSize
-                      << ",\t v_max=" << maxV
-                      << ",\t dx_min=" << minDx
-                      << std::endl;
+    std::cout << "plot next snapshot"
+              << ",\t time step=" << timeStepCounter
+              << ",\t t=" << t
+              << ",\t dt=" << timeStepSize
+              << ",\t v_max=" << maxV
+              << ",\t dx_min=" << minDx
+              << std::endl;
 //
 //            tPlot += tPlotDelta;
 //        }

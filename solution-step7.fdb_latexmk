@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1547813402 "/Users/FatemaK/Desktop/year3/CMIII/Numerical Algorithms/Assignment/solution-step7.tex" "solution-step7.pdf" "solution-step7" 1547813406
-  "/Users/FatemaK/Desktop/year3/CMIII/Numerical Algorithms/Assignment/solution-step7.tex" 1547813402 3485 3766a59bd86540201c37ee29d95c4661 ""
+["pdflatex"] 1547814830 "/Users/FatemaK/Desktop/year3/CMIII/Numerical Algorithms/Assignment/solution-step7.tex" "solution-step7.pdf" "solution-step7" 1547814834
+  "/Users/FatemaK/Desktop/year3/CMIII/Numerical Algorithms/Assignment/solution-step7.tex" 1547814829 3995 609036cfb82dcc4f24fb65c93d36f569 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -63,10 +63,10 @@
   "/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1480246516 1888048 f2c5faed5981a516f406b2ccc20bff71 ""
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1480246552 3873398 95537fc27d949865190528796909ef46 ""
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
-  "solution-step7.aux" 1547813406 709 6500d99fc74332bb9548600a0404df00 ""
-  "solution-step7.tex" 1547813402 3485 3766a59bd86540201c37ee29d95c4661 ""
-  "step7-sp.png" 1547813215 32968 c1f6c391a7d159dc70f3f69de5cfa998 ""
+  "solution-step7.aux" 1547814833 709 9a58854de6d0c68c28e0e00b08f1bd6a ""
+  "solution-step7.tex" 1547814829 3995 609036cfb82dcc4f24fb65c93d36f569 ""
+  "step7-sp.png" 1547814687 36228 6f4a7b534384ccc26ec6a73d88876783 ""
   (generated)
   "solution-step7.log"
-  "solution-step7.pdf"
   "solution-step7.aux"
+  "solution-step7.pdf"

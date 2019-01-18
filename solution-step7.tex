@@ -24,7 +24,7 @@
         \caption{Speed up as number of cores increase}
         \label{sp}
     \end{figure}
-    None of the plots follow Amdahl's law. The results for N=100, table-\ref{n100}, can be explained by taking into account the overhead introduced by the parallelization process. So, it is expected for N$<=$100, increasing the number of cores will result in a decrease in Speed. The serial code is the most fit for this setup. For N=1000 case, table-\ref{n1000}, the parallel code performed better as the number of cores doubled. To some extent, the parallel code for N=1000 case performed better than N=10000 case.
+    The plots follow Amdahl's law to some extent (line for N=10000) but breaks when the number of cores increase as parallelization causes a big overhead. The results for N=100, table-\ref{n100}, can be explained by taking into account the overhead introduced by the parallelization process. So, it is expected for N$<=$100, increasing the number of cores will result in a decrease in Speed. The serial code is the most fit for this setup. For N=1000 case, table-\ref{n1000}, the parallel code performed better as the number of cores doubled. To some extent, the parallel code for N=1000 case performed better than N=10000 case. However, the speed rate increased for the case where N=10000 case as the number of cores increased beyond 8 cores; the speed up slowly reaching a limit. 
 
 \begin{table}[H]
     \centering
@@ -39,6 +39,7 @@
              & 4 & 0.000194034 & 0.62 & 15.5\% \\
              & 8 & 0.000236925 & 0.51 & 6.4\% \\
              & 16 & 0.000313766 & 0.38 & 2.4\% \\
+             & 32 & 0.0129332 & 0.0093 & 0.03\% \\
     \hline
 \end{tabular}
 \caption{Results for running a single time step for 100 particles}
@@ -58,6 +59,7 @@
                  & 4 & 0.00509077 & 3.41 & 85.25\% \\
                  & 8 & 0.00318944 & 5.44 & 68\% \\
                  & 16 & 0.0020295 & 8.55 & 53.43\% \\
+                 & 32 & 0.0129332 & 1.34 & 4.19\% \\
         \hline
     \end{tabular}
     \caption{Results for running a single time step for 1000 particles}
@@ -77,6 +79,7 @@
                  & 4 & 0.318269 & 2.63 & 65.75\% \\
                  & 8 & 0.180262 & 4.64 & 58\% \\
                  & 16 & 0.102834 & 8.13 & 50.81\% \\
+                 & 32 & 0.0835897 & 10.0 & 31.26\% \\
         \hline
         \end{tabular}
         \caption{Results for running a single time step for 10000 particles}

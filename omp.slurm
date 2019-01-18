@@ -3,7 +3,7 @@
 #SBATCH -o omp
 #SBATCH -e omp.err
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=32
 #SBATCH --mail-user=fatema.alkhanaizi@durham.ac.uk
 #SBATCH --mail-type=ALL
 #SBATCH -p par6.q

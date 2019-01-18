@@ -1,8 +1,12 @@
 \documentclass[11pt]{article}
-\usepackage{geometry}
-\geometry{a4paper}
 \usepackage{amsmath}
-
+\usepackage{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage{float}
+\usepackage{multicol}
 
 \title{Step 7: Experiments}
 \author{Fatema Alkhanaizi}
@@ -10,28 +14,39 @@
 
 \begin{document}
     \maketitle
-    All parameters were tested on the same node in Hamilton queue par6; the number of processors for the node was 32. The values reflect a single time step value for computing molecular dynamics for the give particles. Different numbers of molecules were tested, results in table-. The elapsed time was meatured using openMp function omp\_get\_wtime for both serial and parallel functions; to give a unified time reference. 
-    
-    The results for table- can be explained by taking into account the overhead introduced by the parallelization process. So, it is expected for N=100 and lower values, increasing the number of course will result in decrease in Speed. The serial code is the most fit for such a small N. 
+    All parameters were tested on the same node in Hamilton queue par6; the number of processors for the node was 32. The values reflect a single time step value for computing molecular dynamics for the given number of particles. Different numbers of molecules were tested, results in table-\ref{n100} to table-\ref{n10000}. The elapsed time was meatured using openMp function omp\_get\_wtime for both serial and parallel functions; to give a unified time reference; this could lead to minor errors when estimating the elapsed time. 
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step7-sp}.png}
+        \end{minipage}
+        \caption{Speed up as number of cores increase}
+        \label{sp}
+    \end{figure}
+    None of the plots follow Amdahl's law. The results for N=100, table-\ref{n100}, can be explained by taking into account the overhead introduced by the parallelization process. So, it is expected for N$<=$100, increasing the number of cores will result in a decrease in Speed. The serial code is the most fit for this setup. For N=1000 case, table-\ref{n1000}, the parallel code performed better as the number of cores doubled. To some extent, the parallel code for N=1000 case performed better than N=10000 case.
 
-    For N=1000 in table-, the parallel code performed better as the number of cores doubled. However, the speed up graph does not fit with Amdahl's law. 
+\begin{table}[H]
+    \centering
+\begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
+    \hline
+    Serial & 1 & 0.000110134 & 1.0 & 100\% \\
+    \hline
+    Parallel & 1 & 0.000120038 & 1.0 & 100\% \\
+             & 2 & 0.000150815 & 0.80 & 40\% \\
+             & 4 & 0.000194034 & 0.62 & 15.5\% \\
+             & 8 & 0.000236925 & 0.51 & 6.4\% \\
+             & 16 & 0.000313766 & 0.38 & 2.4\% \\
+    \hline
+\end{tabular}
+\caption{Results for running a single time step for 100 particles}
+\label{n100}
+\end{table}
 
-    N = 100
-    \begin{tabular}{|c|c|c|c|c|}
-        \hline
-        Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
-        \hline
-        Serial & 1 & 0.000110134 & 1.0 & 100\% \\
-        \hline
-        Parallel & 1 & 0.000120038 & 1.0 & 100\% \\
-                 & 2 & 0.000150815 & 0.80 & 100\% \\
-                 & 4 & 0.000194034 & 0.62 & 100\% \\
-                 & 8 & 0.000236925 & 0.51 & 100\% \\
-                 & 16 & 0.000313766 & 0.38 & 100\% \\
-        \hline
-    \end{tabular}
-
-    N = 1000
+    \begin{table}[H]
+        \centering
     \begin{tabular}{|c|c|c|c|c|}
         \hline
         Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
@@ -39,26 +54,33 @@
         Serial & 1 & 0.0199244 & 1.0 & 100\% \\
         \hline
         Parallel & 1 & 0.0173634 & 1.0 & 100\% \\
-                 & 2 & 0.0102346 & 1.70 & 117.6\% \\
-                 & 4 & 0.00509077 & 3.41 & 117.3\% \\
-                 & 8 & 0.00318944 & 5.44 & 147.1\% \\
-                 & 16 & 0.0020295 & 8.55 & 187.1\% \\
+                 & 2 & 0.0102346 & 1.70 & 85\% \\
+                 & 4 & 0.00509077 & 3.41 & 85.25\% \\
+                 & 8 & 0.00318944 & 5.44 & 68\% \\
+                 & 16 & 0.0020295 & 8.55 & 53.43\% \\
         \hline
     \end{tabular}
+    \caption{Results for running a single time step for 1000 particles}
+    \label{n1000}
+    \end{table}
 
-    N = 10000
-    \begin{tabular}{|c|c|c|c|c|}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
         \hline
         Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
         \hline
         Serial & 1 & 0.895323 & 1.0 & 100\% \\
         \hline
         Parallel & 1 & 0.836319 & 1.0 & 100\% \\
-                 & 2 & 0.598624 & 1.38 & 100\% \\
-                 & 4 & 0.318269 & 2.63 & 100\% \\
-                 & 8 & 0.180262 & 4.64 & 100\% \\
-                 & 16 & 0.102834 & 8.13 & 100\%
+                 & 2 & 0.598624 & 1.38 & 69\% \\
+                 & 4 & 0.318269 & 2.63 & 65.75\% \\
+                 & 8 & 0.180262 & 4.64 & 58\% \\
+                 & 16 & 0.102834 & 8.13 & 50.81\% \\
         \hline
-    \end{tabular}
+        \end{tabular}
+        \caption{Results for running a single time step for 10000 particles}
+    \label{n10000}
+    \end{table}
 
 \end{document}

@@ -20,7 +20,7 @@
 
 \begin{document}
     \maketitle
-    The following plots are for the distance as time increases to 1e4 and for the force as the distance changes before including adaptive time stepping (step 3 results): 
+    The following plots are for the distance as time increases to 1e4 and for the force as the distance changes before including adaptive time stepping (step 3 results) with parameters 100 1e4 5e-9 0 0 0 0 0 39.948 0 0 0 1e-12 0 0 39.948: 
     \begin{figure}[H] 
         \centering
         \begin{minipage}{0.49\textwidth}
@@ -37,7 +37,7 @@
         \caption{Time step constant at $\delta t=10^{-4}$}
         \label{alldelta}
     \end{figure}
-    After including adaptive time stepping with a minimum time step of $10^{-8}$, the minimum distance value remained less than $10^{-10}$ and the particles were in constant oscillation (the particles were in a constast attraction and repulsion motion). The following plots demonstrate this result:
+    After including adaptive time stepping with a minimum time step of $10^{-8}$, the minimum distance value remained less than $10^{-10}$ and the particles were in constant oscillation (the particles were in a constast attraction and repulsion motion). The following plots demonstrate this result with parameters 100 1e4 5e-9 0 0 0 0 0 39.948 0 0 0 1e-12 0 0 39.948:
     \begin{figure}[H] 
         \centering
         \begin{minipage}{0.49\textwidth}
@@ -51,7 +51,7 @@
             \subcaption{Force vs minimum distance}
             \label{fadts}
         \end{minipage}
-        \caption{Adaptive time step with minimum $\delta t=10^{-8}$}
+        \caption{Adaptive time step with minimum $\delta t=10^{-8}$ for 2 particles}
         \label{alldelta}
     \end{figure}
     The following condition were followed when including adaptive time stepping:
@@ -63,7 +63,7 @@
          $$ \delta t \times maxV < minDx $$
          \item if non of the above was satisfied the time step increased by a factor of 1.1.
     \end{itemize}
-    The running time for the algorithm increased signifigantly after including the adaptive time step compared to the results from step 3. Similar behaviour were obtained when another particle was introduced to the system, however the influence of the third particle affected the force applied on other particles (reduced repulsion force). The following plot demonstrate this:
+    The running time for the algorithm increased signifigantly after including the adaptive time step compared to the results from step 3. Similar behaviour were obtained when another particle was introduced to the system, however the influence of the third particle affected the force applied on other particles (reduced repulsion force); oscillation started at an earlier time. The following plot with parameters 100 1e4 5e-9 0 0 0 0 0 39.948 0 0 0 1e-12 0 0 39.948 -5e-9 0 0 1e-12 0 0 39.948 demonstrate this:
     \begin{figure}[H] 
         \centering
         \begin{minipage}{0.49\textwidth}
@@ -75,10 +75,10 @@
             \centering
             \includegraphics[width=1\textwidth]{{step4-3pf}.png}
             \subcaption{Force vs minimum distance}
-            \label{fadts}
+            \label{f3p}
         \end{minipage}
         \caption{Adaptive time step with minimum $\delta t=10^{-8}$ for 3 particles}
-        \label{alldelta}
+        \label{3p}
     \end{figure}
 
     \printbibliography

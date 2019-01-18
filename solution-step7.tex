@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage{amsmath}
+
+
+\title{Step 7: Experiments}
+\author{Fatema Alkhanaizi}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    All parameters were tested on the same node in Hamilton queue par6; the number of processors for the node was 32. The values reflect a single time step value for computing molecular dynamics for the give particles. Different numbers of molecules were tested, results in table-. The elapsed time was meatured using openMp function omp\_get\_wtime for both serial and parallel functions; to give a unified time reference. 
+    
+    The results for table- can be explained by taking into account the overhead introduced by the parallelization process. So, it is expected for N=100 and lower values, increasing the number of course will result in decrease in Speed. The serial code is the most fit for such a small N. 
+
+    For N=1000 in table-, the parallel code performed better as the number of cores doubled. However, the speed up graph does not fit with Amdahl's law. 
+
+    N = 100
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
+        \hline
+        Serial & 1 & 0.000110134 & 1.0 & 100\% \\
+        \hline
+        Parallel & 1 & 0.000120038 & 1.0 & 100\% \\
+                 & 2 & 0.000150815 & 0.80 & 100\% \\
+                 & 4 & 0.000194034 & 0.62 & 100\% \\
+                 & 8 & 0.000236925 & 0.51 & 100\% \\
+                 & 16 & 0.000313766 & 0.38 & 100\% \\
+        \hline
+    \end{tabular}
+
+    N = 1000
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
+        \hline
+        Serial & 1 & 0.0199244 & 1.0 & 100\% \\
+        \hline
+        Parallel & 1 & 0.0173634 & 1.0 & 100\% \\
+                 & 2 & 0.0102346 & 1.70 & 117.6\% \\
+                 & 4 & 0.00509077 & 3.41 & 117.3\% \\
+                 & 8 & 0.00318944 & 5.44 & 147.1\% \\
+                 & 16 & 0.0020295 & 8.55 & 187.1\% \\
+        \hline
+    \end{tabular}
+
+    N = 10000
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Version & Number of Processors & Time Elapsed (seconds) & Speed Up & Efficiency \\
+        \hline
+        Serial & 1 & 0.895323 & 1.0 & 100\% \\
+        \hline
+        Parallel & 1 & 0.836319 & 1.0 & 100\% \\
+                 & 2 & 0.598624 & 1.38 & 100\% \\
+                 & 4 & 0.318269 & 2.63 & 100\% \\
+                 & 8 & 0.180262 & 4.64 & 100\% \\
+                 & 16 & 0.102834 & 8.13 & 100\%
+        \hline
+    \end{tabular}
+
+\end{document}

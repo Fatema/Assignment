@@ -6,3 +6,4 @@ step-2/*
 .vscode/
 *.o
 result*
+*.optrpt

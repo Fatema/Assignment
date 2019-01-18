@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage{float}
+\usepackage{multicol}
+
+
+\usepackage[english]{babel}
+\usepackage[backend=biber]{biblatex}
+
+\addbibresource{ref.bib}
+
+\title{Step 4: Adaptive Time Stepping}
+\author{Fatema Alkhanaizi}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    The following plots are for the distance as time increases to 1e4 and for the force as the distance changes before including adaptive time stepping (step 3 results): 
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step4-distance}.png}
+            \subcaption{Minimum distance at t=$1e4$}
+        \end{minipage}
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step4-force}.png}
+            \subcaption{Force vs minimum distance}
+            \label{force}
+        \end{minipage}
+        \caption{Time step constant at $\delta t=10^{-4}$}
+        \label{alldelta}
+    \end{figure}
+    After including adaptive time stepping with a minimum time step of $10^{-8}$, the minimum distance value remained less than $10^{-10}$ and the particles were in constant oscillation (the particles were in a constast attraction and repulsion motion). The following plots demonstrate this result:
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{atstep}.png}
+            \subcaption{Minimum distance at t=$1e4$}
+        \end{minipage}
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step4-fadts}.png}
+            \subcaption{Force vs minimum distance}
+            \label{fadts}
+        \end{minipage}
+        \caption{Adaptive time step with minimum $\delta t=10^{-8}$}
+        \label{alldelta}
+    \end{figure}
+    The following condition were followed when including adaptive time stepping:
+    \begin{itemize}
+        \item time step cannot be less than $\delta t=10^{-18}$.
+        \item minimum distance less than $10^{-9}$, the time step must be set to the minimum.\\
+         This value can be determined by studying the relationship between the distance, the force and the potential. When the particles reach minimum potential the derivative of the force is zero at that point \cite{chem}. The distance for the Argon of when this happens is around $3.816 \times 10^{-10}$. the force becomes repulsive after this distance is reached hense the negative force in plot-\ref{fadts}, making this a point of interest. This value is overstepped in plot-\ref{force}.
+         \item To avoid particles jumping through or into each other, the time step was constantly reduced by a factor of 2 until this expression was satisfied:
+         $$ \delta t \times maxV < minDx $$
+         \item if non of the above was satisfied the time step increased by a factor of 1.1.
+    \end{itemize}
+    The running time for the algorithm increased signifigantly after including the adaptive time step compared to the results from step 3. Similar behaviour were obtained when another particle was introduced to the system, however the influence of the third particle affected the force applied on other particles (reduced repulsion force). The following plot demonstrate this:
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step4-3pd}.png}
+            \subcaption{Minimum distance at t=$1e4$}
+        \end{minipage}
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step4-3pf}.png}
+            \subcaption{Force vs minimum distance}
+            \label{fadts}
+        \end{minipage}
+        \caption{Adaptive time step with minimum $\delta t=10^{-8}$ for 3 particles}
+        \label{alldelta}
+    \end{figure}
+
+    \printbibliography
+
+\end{document}

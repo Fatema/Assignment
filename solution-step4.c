@@ -266,7 +266,7 @@ void updateBody() {
 
     minDx = std::sqrt(minDx);
 
-    double mint = 1e-8;
+    double mint = 1e-7;
     double dtScaling = 1.0;
 
     // there is a chance that the particles might jump into each other (penetrate) or jump through each other

@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+\usepackage{float}
+\usepackage{multicol}
+
+\graphicspath{}
+
+\title{Step 3: Lennard-Jones experiments}
+\author{Fatema Alkhanaizi}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    The following plot is for the minimum distance against time with parameters 100 1e4 5e-9 0 0 0 0 0 39.948 0 0 0 1e-12 0 0 39.948.
+    Different time steps were tested: {$10^{-1}, 10^{-2}, 10^{-3}, ... , 10^{-6}$}. For the distance, explicit Euler was used for their computation truncated after the first order derivative (the velocity is the first derivative of the distance) resulting in error of $O(h^2)$. Actual Distance expression:
+    $$ x(t + \delta t) = x(t) + \delta t v(t) + \delta t^2 a(t)/2 + ... $$
+    Expression used:
+    $$ x(t + \delta t) = x(t) + \delta t v(t) $$
+    Resulting error will be the accumulation of the higher order derivatives, in other words $O(h^2)$.
+    The convergence order is of order 1, $O(h)$. The following plots and table below confirms this result. As the time step is divided by 10, the error is reduced by a factor of 10 as well. \\
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.8\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{solution-step3}.png}
+        \end{minipage}
+        \caption{Minimum distance until t=$1e4$}
+        \label{alldelta}
+    \end{figure}
+    As the exact solution is not known an iterative approach was taken to compute the convergence, table-\ref{mindx:conv}. To approximate $C_i$, the following expression was used:
+    $$ |y^{i+1} - y^i| \leq C_i |y^{i} - y^{i-1}|^p $$
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+                \hline
+                Minimum Distance & $\delta$t & error ($|y^{i+1} - y^i|$) & approximate $C_i$ \\
+                \hline
+                3.03E-08 & 1e-1 & 1.9e-8 & \\
+                1.14E-08 & 1e-2 & 4.04e-9 & 2.13E-01 \\
+                7.34E-09 & 1e-3 & 5.45e-10 & 1.35E-01 \\
+                6.79E-09 & 1e-4 & 5.72e-11 & 1.05E-01 \\
+                6.73E-09 & 1e-5 & 5.75e-12 & 1.00E-01 \\
+                6.73E-09 & 1e-6 & & \\
+                \hline
+            \end{tabular}
+        \caption{Results at t=1e4 with Lennard-Jones to compute the force for p=1}
+        \label{mindx:conv} 
+    \end{table}
+    Below are the plots for table-\ref{mindx:conv}:  
+    \begin{figure}[H] 
+        \centering
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step3-endt}.png}
+            \subcaption{Minimum distance at t=$1e4$}
+        \end{minipage}
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=1\textwidth]{{step3-conv}.png}
+            \subcaption{Error for each $\delta$t (both axis were taken at $log_{10}$)}
+            \label{log}
+        \end{minipage}
+        \caption{convergence order for distance evaluation}
+        \label{alldelta}
+    \end{figure}
+    It is evident from plot-\ref{log} that C is indeed 0.1 and is constant when p=1, so the convergence order is 1.
+    
+
+
+\end{document}
